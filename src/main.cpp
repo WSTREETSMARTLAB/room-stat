@@ -1,11 +1,15 @@
 #include <Arduino.h>
 #include <WiFi.h>
 #include <WebServer.h>
+#include <Preferences.h>
 
 const char* ssid = "Room-Stat-Setup";
 const char* password = "11112222";
 
 WebServer server(80);
+Preferences preferences;
+
+bool wasRead = false;
 
 void handleRoot() {
   String html = R"rawliteral(
@@ -52,6 +56,12 @@ void handleSubmit () {
   String wifiSSID = server.arg("wifi_ssid");
   String wifiPASS = server.arg("wifi_pass");
 
+  preferences.begin("setup", false);
+  preferences.putString("tool_name", name);
+  preferences.putString("tool_pass", password);
+  preferences.putString("wifi_ssid", wifiSSID);
+  preferences.putString("wifi_pass", wifiPASS);
+
   server.send(200, "text/html","data received");
 }
 
@@ -73,9 +83,6 @@ void setup() {
   server.begin();
   Serial.println("Server started");
 
-  // create wi-fi access point
-  // save tool auth and wi-fi credentials
-  // 
   // connect to wi-fi with saved credentials
   // check server status
   //
@@ -85,6 +92,30 @@ void setup() {
 
 void loop() {
   server.handleClient();
+
+  if(!wasRead){
+    preferences.begin("setup", true);
+
+    String name     = preferences.getString("tool_name", "n/a");
+    String password = preferences.getString("tool_pass", "n/a");
+    String wifiSSID = preferences.getString("wifi_ssid", "n/a");
+    String wifiPASS = preferences.getString("wifi_pass", "n/a");
+
+    wasRead = true;
+    preferences.end();
+
+    Serial.println("===== ДАННЫЕ ИЗ FLASH =====");
+    Serial.println("Имя устройства: " + name);
+    Serial.println("Пароль: " + password);
+    Serial.println("Wi-Fi SSID: " + wifiSSID);
+    Serial.println("Wi-Fi пароль: " + wifiPASS);
+    Serial.println("===========================");
+  }
+
+  delay(2000);
+
+  wasRead = false;
+
   // get sensor params
   // format json
   // send request to transmit api
