@@ -23,9 +23,9 @@ App::App() {
 void App::setup(){
     config = preferences.load();
 
-    // if(config.code == ""){
+    if(config.code == ""){
         accessPointManager.begin(ssid, password);
-    // }
+    }
 
     // start wi-fi server with config.wifi_ssid , config.wifi_pass
 }
@@ -36,6 +36,7 @@ void App::loop(){
     config = preferences.load();
 
     Serial.println("===== ДАННЫЕ ИЗ FLASH =====");
+    Serial.println("Type: " + config.type);
     Serial.println("Code: " + config.code);
     Serial.println("Wi-Fi SSID: " + config.wifi_ssid);
     Serial.println("Wi-Fi пароль: " + config.wifi_pass);
