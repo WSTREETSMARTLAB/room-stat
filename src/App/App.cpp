@@ -30,9 +30,9 @@ void App::setup(){
 
         if(config.code == ""){
             accessPointManager.begin(ssid, password);
+        } else {
+            wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
         }
-        
-        wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
     }
 }
 
