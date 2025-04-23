@@ -8,8 +8,7 @@ private:
     static void handleRoot();
     static void handleSubmit();
     static WebServer* _server;
-    static Preferences* _preferences;
 public:
-    AccessPointManager(WebServer& server, Preferences& preferences);
+    AccessPointManager(WebServer& server);
     void begin(String ssid, String password);
 };

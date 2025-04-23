@@ -14,7 +14,7 @@ bool wasRead = false;
 
 WebServer server(80);
 Preferences preferences;
-AccessPointManager accessPointManager(server, preferences);
+AccessPointManager accessPointManager(server);
 
 App::App() {
     
@@ -40,7 +40,6 @@ void App::loop(){
         String wifiPASS = preferences.getString("wifi_pass", "n/a");
         String wifiSSID = preferences.getString("wifi_ssid", "n/a");
 
-        wasRead = true;
         preferences.end();
 
         Serial.println("===== ДАННЫЕ ИЗ FLASH =====");
