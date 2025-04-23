@@ -3,6 +3,9 @@
 #include <Storage/ToolPreferences.h>
 #include <Http/view/ToolConfigSetupHtml.h>
 #include <Http/view/ValidationErrorHtml.h>
+#include <Http/view/ValidationSuccessHtml.h>
+#include <Http/view/RebootingHtml.h>
+#include <Esp.h>
 
 WebServer* AccessPointManager::_server = nullptr;
 
@@ -15,6 +18,7 @@ void AccessPointManager::begin(String ssid, String password){
     IPAddress IP = WiFi.softAPIP();
     _server->on("/", HTTP_GET, handleRoot);
     _server->on("/submit", HTTP_POST, handleSubmit);
+    _server->on("/reboot", HTTP_POST, handleReboot);
     _server->begin();
 };
 
@@ -41,10 +45,15 @@ void AccessPointManager::handleSubmit(){
     config.wifi_pass = wifiPass;
 
     preferences.save(config);
-  
-    // send success page with btn to reboot device (with next reboot data will not open the server)
 
-    
+    _server->send(200, "text/html", validationSuccessHtml);
+}
 
-    _server->send(200, "text/html", "data received");
+void AccessPointManager::handleReboot() {
+  _server->send(200, "text/html", rebootingHtml);
+  delay(3000);
+
+  WiFi.softAPdisconnect(true);
+  delay(200);
+  ESP.restart();
 }

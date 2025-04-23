@@ -7,6 +7,7 @@ class AccessPointManager
 private:
     static void handleRoot();
     static void handleSubmit();
+    static void handleReboot();
     static WebServer* _server;
 public:
     AccessPointManager(WebServer& server);
