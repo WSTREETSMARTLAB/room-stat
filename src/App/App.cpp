@@ -1,8 +1,9 @@
 #include <App/App.h>
 #include <WiFi.h>
 #include <WebServer.h>
-#include <Preferences.h>
+#include <Storage/ToolPreferences.h>
 #include <Network/AccessPointManager.h>
+#include <DTO/ToolConfig.h>
 
 const char* ssid = "Room-Stat-Setup";
 const char* password = "11112222";
@@ -13,19 +14,18 @@ void handleSubmit();
 bool wasRead = false;
 
 WebServer server(80);
-Preferences preferences;
 AccessPointManager accessPointManager(server);
+ToolPreferences preferences;
+ToolConfig config;
 
 App::App() {
     
 }
 
 void App::setup(){
-    preferences.begin("setup", true); 
-    String code = preferences.getString("code", "");
-    preferences.end();
+    config = preferences.load();
 
-    if(code == ""){
+    if(config.code == ""){
         accessPointManager.begin(ssid, password);
     }
 }
@@ -34,18 +34,12 @@ void App::loop(){
     server.handleClient();
 
     if(!wasRead){
-        preferences.begin("setup", true);
-
-        String code     = preferences.getString("code", "");
-        String wifiPASS = preferences.getString("wifi_pass", "n/a");
-        String wifiSSID = preferences.getString("wifi_ssid", "n/a");
-
-        preferences.end();
+        config = preferences.load();
 
         Serial.println("===== ДАННЫЕ ИЗ FLASH =====");
-        Serial.println("Code: " + code);
-        Serial.println("Wi-Fi SSID: " + wifiSSID);
-        Serial.println("Wi-Fi пароль: " + wifiPASS);
+        Serial.println("Code: " + config.code);
+        Serial.println("Wi-Fi SSID: " + config.code);
+        Serial.println("Wi-Fi пароль: " + config.code);
         Serial.println("===========================");
   }
 

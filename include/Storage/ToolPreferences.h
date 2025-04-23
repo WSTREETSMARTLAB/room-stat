@@ -2,11 +2,11 @@
 #include <DTO/ToolConfig.h>
 #include <Preferences.h>
 
-class ToolPrefernces
+class ToolPreferences
 {
 private:
-    ToolConfig load();
 public:
-    ToolPrefernces(/* args */);
+    ToolPreferences(/* args */);
     void save(const ToolConfig& config);
+    ToolConfig load();
 };

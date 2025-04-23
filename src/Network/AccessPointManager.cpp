@@ -1,4 +1,5 @@
 #include <Network/AccessPointManager.h>
+#include <Storage/ToolPreferences.h>
 
 WebServer* AccessPointManager::_server = nullptr;
 
@@ -52,14 +53,14 @@ void AccessPointManager::handleRoot(){
 }
 
 void AccessPointManager::handleSubmit(){
-    String code = _server->arg("name");
-    String wifiSSID = _server->arg("wifi_ssid");
-    String wifiPASS = _server->arg("wifi_pass");
-  
-    // preferences.begin("setup", false);
-    // preferences.putString("tool_name", code);
-    // preferences.putString("wifi_ssid", wifiSSID);
-    // preferences.putString("wifi_pass", wifiPASS);
+    ToolConfig config;
+    ToolPreferences preferences;
+
+    config.code = _server->arg("name");
+    config.wifi_ssid = _server->arg("wifi_ssid");
+    config.wifi_pass = _server->arg("wifi_pass");
+
+    preferences.save(config);
   
     _server->send(200, "text/html", "data received");
     _server->close();

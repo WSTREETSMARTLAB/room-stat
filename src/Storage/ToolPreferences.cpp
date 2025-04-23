@@ -1,22 +1,30 @@
-#include <Storage/ToolPrefernces.h>
+#include <Storage/ToolPreferences.h>
 
+ToolPreferences::ToolPreferences(){}
 
-ToolPrefernces::ToolPrefernces(){}
-
-void save(const ToolConfig& config){
+void ToolPreferences::save(const ToolConfig& config){
     Preferences preferences;
 
-    preferences.begin("setup", true);
-
     preferences.begin("setup", false);
-    preferences.putString("tool_name", config.code);
+
+    preferences.putString("code", config.code);
     preferences.putString("wifi_ssid", config.wifi_pass);
     preferences.putString("wifi_pass", config.wifi_ssid);
 
     preferences.end();
 }
 
-ToolConfig load() {
+ToolConfig ToolPreferences::load() {
     ToolConfig config;
+    Preferences preferences;
 
+    preferences.begin("setup", true);
+    
+    config.code = preferences.getString("code", "");
+    config.wifi_ssid = preferences.getString("wifi_ssid", "");
+    config.wifi_pass = preferences.getString("wifi_pass", "");
+
+    preferences.end();
+
+    return config;
 }
