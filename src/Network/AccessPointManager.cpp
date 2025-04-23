@@ -36,10 +36,8 @@ void AccessPointManager::handleRoot(){
         <body>
           <h2>Register Device</h2>
           <form action="/submit" method="POST">
-            <label>Device Name:</label>
-            <input type="text" name="name" required>
-            <label>Device Password:</label>
-            <input type="password" name="password" required>
+            <label>Code:</label>
+            <input type="text" code="code" required>
             <label>Wi-Fi SSID:</label>
             <input type="text" name="wifi_ssid" required>
             <label>Wi-Fi Password:</label>
@@ -49,6 +47,8 @@ void AccessPointManager::handleRoot(){
         </body>
         </html>
       )rawliteral";
+
+      _server->send(200, "text/html", html);  
 }
 
 void AccessPointManager::handleSubmit(){

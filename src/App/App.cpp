@@ -21,9 +21,11 @@ App::App() {
 }
 
 void App::setup(){
+    preferences.begin("setup", true); 
     String code = preferences.getString("code", "");
+    preferences.end();
 
-    if(!code){
+    if(code == ""){
         accessPointManager.begin(ssid, password);
     }
 }
