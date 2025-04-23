@@ -1,9 +1,11 @@
 #include <Network/AccessPointManager.h>
 
 WebServer* AccessPointManager::_server = nullptr;
+Preferences* AccessPointManager::_preferences = nullptr;
 
-AccessPointManager::AccessPointManager(WebServer& server) {
+AccessPointManager::AccessPointManager(WebServer& server, Preferences& preferences) {
     _server = &server;
+    _preferences = &preferences;
 }
 
 void AccessPointManager::begin(String ssid, String password){

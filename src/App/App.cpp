@@ -14,7 +14,7 @@ bool wasRead = false;
 
 WebServer server(80);
 Preferences preferences;
-AccessPointManager accessPointManager(server);
+AccessPointManager accessPointManager(server, preferences);
 
 App::App() {
     
