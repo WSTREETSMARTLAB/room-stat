@@ -1,4 +1,5 @@
 #include <Network/AccessPointManager.h>
+#include <Validators/ToolPreferencesValidator.h>
 #include <Storage/ToolPreferences.h>
 
 WebServer* AccessPointManager::_server = nullptr;
@@ -54,15 +55,31 @@ void AccessPointManager::handleRoot(){
 
 void AccessPointManager::handleSubmit(){
     ToolConfig config;
+    ToolPreferencesValidator validator;
     ToolPreferences preferences;
 
-    // validate args
-    // if error - send (422, "text/html", "validation error") page with return btn
+    String code = _server->arg("code");
+    String wifiSSID = _server->arg("wifi_ssid");
+    String wifiPass = _server->arg("wifi_pass");
 
-    // if validated
-    config.code = _server->arg("code");
-    config.wifi_ssid = _server->arg("wifi_ssid");
-    config.wifi_pass = _server->arg("wifi_pass");
+    if (!validator.validated(code, wifiSSID, wifiPass)){
+        String html = R"rawliteral(
+            <html>
+            <head><title>Validation Error</title></head>
+            <body>
+              <h2>Validation Error</h2>
+              <button onclick="window.history.back()">Back</button>
+            </body>
+            </html>
+        )rawliteral";
+
+      _server->send(422, "text/html", html);
+      return;
+    }
+
+    config.code = code;
+    config.wifi_ssid = wifiSSID;
+    config.wifi_pass = wifiPass;
 
     preferences.save(config);
   
