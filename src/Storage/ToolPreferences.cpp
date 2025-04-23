@@ -20,14 +20,9 @@ ToolConfig ToolPreferences::load() {
 
     preferences.begin("setup", true);
 
-    // remove hardcode after test
-    config.code = "BBKT-4AN9";
-    config.wifi_ssid = "logovo_pirtatov";
-    config.wifi_pass = "11112222";
-
-    // config.code = preferences.getString("code", "");
-    // config.wifi_ssid = preferences.getString("wifi_ssid", "");
-    // config.wifi_pass = preferences.getString("wifi_pass", "");
+    config.code = preferences.getString("code", "");
+    config.wifi_ssid = preferences.getString("wifi_ssid", "");
+    config.wifi_pass = preferences.getString("wifi_pass", "");
 
     preferences.end();
 

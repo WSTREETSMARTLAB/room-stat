@@ -3,6 +3,7 @@
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
 #include <Network/AccessPointManager.h>
+#include <Network/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
 
 const char* ssid = "Room-Stat-Setup";
@@ -13,6 +14,7 @@ void handleSubmit();
 
 WebServer server(80);
 AccessPointManager accessPointManager(server);
+WiFiPointManager wifiPointManager;
 ToolPreferences preferences;
 ToolConfig config;
 
@@ -21,13 +23,17 @@ App::App() {
 }
 
 void App::setup(){
-    config = preferences.load();
+    bool wifiConnected = wifiPointManager.isConnected();
 
-    if(config.code == ""){
-        accessPointManager.begin(ssid, password);
+    if (!wifiConnected){
+        config = preferences.load();
+
+        if(config.code == ""){
+            accessPointManager.begin(ssid, password);
+        }
+        
+        wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
     }
-
-    // start wi-fi server with config.wifi_ssid , config.wifi_pass
 }
 
 void App::loop(){
@@ -35,7 +41,7 @@ void App::loop(){
 
     config = preferences.load();
 
-    Serial.println("===== ДАННЫЕ ИЗ FLASH =====");
+    Serial.println("===== Wi Fi Connected. Device Data: =====");
     Serial.println("Type: " + config.type);
     Serial.println("Code: " + config.code);
     Serial.println("Wi-Fi SSID: " + config.wifi_ssid);
