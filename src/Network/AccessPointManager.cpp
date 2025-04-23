@@ -38,7 +38,7 @@ void AccessPointManager::handleRoot(){
           <h2>Register Device</h2>
           <form action="/submit" method="POST">
             <label>Code:</label>
-            <input type="text" code="code" required>
+            <input type="text" name="code" required>
             <label>Wi-Fi SSID:</label>
             <input type="text" name="wifi_ssid" required>
             <label>Wi-Fi Password:</label>
@@ -56,12 +56,16 @@ void AccessPointManager::handleSubmit(){
     ToolConfig config;
     ToolPreferences preferences;
 
-    config.code = _server->arg("name");
+    // validate args
+    // if error - send (422, "text/html", "validation error") page with return btn
+
+    // if validated
+    config.code = _server->arg("code");
     config.wifi_ssid = _server->arg("wifi_ssid");
     config.wifi_pass = _server->arg("wifi_pass");
 
     preferences.save(config);
   
+    // send success page with btn to reboot device (with next reboot data will not open the server)
     _server->send(200, "text/html", "data received");
-    _server->close();
 }

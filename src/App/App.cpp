@@ -11,8 +11,6 @@ const char* password = "11112222";
 void handleRoot();
 void handleSubmit();
 
-bool wasRead = false;
-
 WebServer server(80);
 AccessPointManager accessPointManager(server);
 ToolPreferences preferences;
@@ -25,23 +23,21 @@ App::App() {
 void App::setup(){
     config = preferences.load();
 
-    if(config.code == ""){
+    // if(config.code == ""){
         accessPointManager.begin(ssid, password);
-    }
+    // }
+
+    // start wi-fi server with config.wifi_ssid , config.wifi_pass
 }
 
 void App::loop(){
     server.handleClient();
 
-    if(!wasRead){
-        config = preferences.load();
+    config = preferences.load();
 
-        Serial.println("===== ДАННЫЕ ИЗ FLASH =====");
-        Serial.println("Code: " + config.code);
-        Serial.println("Wi-Fi SSID: " + config.code);
-        Serial.println("Wi-Fi пароль: " + config.code);
-        Serial.println("===========================");
-  }
-
-  wasRead = false;
+    Serial.println("===== ДАННЫЕ ИЗ FLASH =====");
+    Serial.println("Code: " + config.code);
+    Serial.println("Wi-Fi SSID: " + config.wifi_ssid);
+    Serial.println("Wi-Fi пароль: " + config.wifi_pass);
+    Serial.println("===========================");
 }
