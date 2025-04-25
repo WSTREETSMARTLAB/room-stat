@@ -8,6 +8,6 @@ private:
     String _password;
 public:
     void connect(const String ssid, const String password);
-    bool isConnected() const;
+    static bool isConnected();
     IPAddress getIP() const;
 };

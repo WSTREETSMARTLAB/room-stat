@@ -9,6 +9,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
+#include <Http/services/ApiService.h>
 
 #define DHT_PIN 4
 #define DHT_TYPE DHT22
@@ -21,6 +22,7 @@
 
 const char* ssid = "Room-Stat-Setup";
 const char* password = "11112222";
+const char* serverUrl = "http://192.168.0.100:8080";
 
 WebServer server(80);
 AccessPointManager accessPointManager(server);
@@ -29,6 +31,7 @@ ToolPreferences preferences;
 ToolConfig config;
 DHT dht(DHT_PIN, DHT_TYPE);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_ADDRESS);
+ApiService apiService(serverUrl);
 
 App::App() {
     
@@ -37,6 +40,7 @@ App::App() {
 void App::setup(){
     bool wifiConnected = wifiPointManager.isConnected();
     config = preferences.load();
+    const String token;
 
     if (!wifiConnected){
         if(config.code == ""){
@@ -46,7 +50,12 @@ void App::setup(){
         }
     }
 
+    // format json
+    String json = "{\"temperature\": 25.6}";
+    String response;
 
+    apiService.post("/core/api/v1/tools/auth", json, response);
+    apiService.setToken(""); // set token from response
 
     // if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
     //     Serial.println(F("Не удалось инициализировать OLED дисплей"));

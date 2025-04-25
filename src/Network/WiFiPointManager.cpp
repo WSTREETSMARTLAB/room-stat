@@ -16,7 +16,7 @@ void WiFiPointManager::connect(const String ssid, const String password) {
     }
 }
 
-bool WiFiPointManager::isConnected() const {
+bool WiFiPointManager::isConnected() {
     return WiFi.status() == WL_CONNECTED;
 }
 
