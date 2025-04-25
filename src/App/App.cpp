@@ -5,18 +5,30 @@
 #include <Network/AccessPointManager.h>
 #include <Network/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
+#include <DHT.h>
+#include <Wire.h>
+#include <Adafruit_GFX.h>
+#include <Adafruit_SSD1306.h>
+
+#define DHT_PIN 4
+#define DHT_TYPE DHT22
+
+#define SCREEN_WIDTH 128
+#define SCREEN_HEIGHT 32
+
+#define OLED_RESET -1
+#define SCREEN_ADDRESS 0x3C
 
 const char* ssid = "Room-Stat-Setup";
 const char* password = "11112222";
-
-void handleRoot();
-void handleSubmit();
 
 WebServer server(80);
 AccessPointManager accessPointManager(server);
 WiFiPointManager wifiPointManager;
 ToolPreferences preferences;
 ToolConfig config;
+DHT dht(DHT_PIN, DHT_TYPE);
+Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_ADDRESS);
 
 App::App() {
     
@@ -24,27 +36,62 @@ App::App() {
 
 void App::setup(){
     bool wifiConnected = wifiPointManager.isConnected();
+    config = preferences.load();
 
     if (!wifiConnected){
-        config = preferences.load();
-
         if(config.code == ""){
             accessPointManager.begin(ssid, password);
         } else {
             wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
         }
     }
+
+    if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
+        Serial.println(F("Не удалось инициализировать OLED дисплей"));
+        while (true);
+    }
+    
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(0, 0);
+    display.println("WSTREET SMART LAB");
+    display.display();
+
+    dht.begin();
 }
 
 void App::loop(){
     server.handleClient();
-
-    config = preferences.load();
 
     Serial.println("===== Wi Fi Connected. Device Data: =====");
     Serial.println("Type: " + config.type);
     Serial.println("Code: " + config.code);
     Serial.println("Wi-Fi SSID: " + config.wifi_ssid);
     Serial.println("Wi-Fi пароль: " + config.wifi_pass);
+    Serial.println("===========================");
+
+    float temperature = dht.readTemperature();
+    float humidity = dht.readHumidity();
+
+    if (isnan(humidity) || isnan(temperature)) {
+        Serial.println("Не удалось считать данные с DHT22");
+        return;
+    }
+
+    display.clearDisplay();
+    display.setTextSize(2);
+    display.setCursor(0, 0);
+    display.print(temperature, 1);
+    display.println(" C, ");
+    display.print(humidity, 1);
+    display.println(" %");
+    display.display();
+
+    Serial.println("===== Sensor Data: =====");
+    Serial.print("Temperature: ");
+    Serial.print(temperature);
+    Serial.print("Humidity: ");
+    Serial.print(humidity);
     Serial.println("===========================");
 }
