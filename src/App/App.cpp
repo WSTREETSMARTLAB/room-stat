@@ -46,19 +46,21 @@ void App::setup(){
         }
     }
 
-    if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
-        Serial.println(F("Не удалось инициализировать OLED дисплей"));
-        while (true);
-    }
-    
-    display.clearDisplay();
-    display.setTextSize(1);
-    display.setTextColor(SSD1306_WHITE);
-    display.setCursor(0, 0);
-    display.println("WSTREET SMART LAB");
-    display.display();
 
-    dht.begin();
+
+    // if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
+    //     Serial.println(F("Не удалось инициализировать OLED дисплей"));
+    //     while (true);
+    // }
+    
+    // display.clearDisplay();
+    // display.setTextSize(1);
+    // display.setTextColor(SSD1306_WHITE);
+    // display.setCursor(0, 0);
+    // display.println("WSTREET SMART LAB");
+    // display.display();
+
+    // dht.begin();
 }
 
 void App::loop(){
