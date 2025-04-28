@@ -11,6 +11,7 @@
 #include <Adafruit_SSD1306.h>
 #include <Http/services/ApiService.h>
 #include <Processes/AuthProcess.h>
+#include <Processes/ConnectionProcess.h>
 
 #define DHT_PIN 4
 #define DHT_TYPE DHT22
@@ -21,8 +22,6 @@
 #define OLED_RESET -1
 #define SCREEN_ADDRESS 0x3C
 
-const char* ssid = "Room-Stat-Setup";
-const char* password = "11112222";
 const char* serverUrl = "http://192.168.0.100:8080";
 
 WebServer server(80);
@@ -34,43 +33,23 @@ DHT dht(DHT_PIN, DHT_TYPE);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_ADDRESS);
 ApiService apiService(serverUrl);
 AuthProcess auth(apiService, config);
-
-App::App() {
-    
-}
+ConnectionProcess connection(accessPointManager, wifiPointManager);
 
 void App::setup(){
-    bool wifiConnected = wifiPointManager.isConnected();
+    bool wifiConnected = WiFiPointManager::isConnected();
     const String token;
 
     // dht.begin();
 
     if (!wifiConnected){
-        config = preferences.load();
-
-        if(config.code == ""){
-            accessPointManager.begin(ssid, password);
-        } else {
-            wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
-            auth.handle();
-
-            // show message - sensor is authorized on display
-            Serial.println("sensor is authorized");
-            delay(2000);
-        }
+        connection.handle();
     }
 
-    // if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
-    //     Serial.println(F("Не удалось инициализировать OLED дисплей"));
-    //     while (true);
-    // }
-    
-    // display.clearDisplay();
-    // display.setTextSize(1);
-    // display.setTextColor(SSD1306_WHITE);
-    // display.setCursor(0, 0);
-    // display.println("WSTREET SMART LAB");
-    // display.display();
+    auth.handle();
+
+    // show message - sensor is authorized on display
+    Serial.println("sensor is ready");
+    delay(2000);
 }
 
 void App::loop(){
