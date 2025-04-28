@@ -10,6 +10,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
 #include <Http/services/ApiService.h>
+#include <Processes/AuthProcess.h>
 
 #define DHT_PIN 4
 #define DHT_TYPE DHT22
@@ -32,6 +33,7 @@ ToolConfig config;
 DHT dht(DHT_PIN, DHT_TYPE);
 Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_ADDRESS);
 ApiService apiService(serverUrl);
+AuthProcess auth(apiService, config);
 
 App::App() {
     
@@ -39,23 +41,24 @@ App::App() {
 
 void App::setup(){
     bool wifiConnected = wifiPointManager.isConnected();
-    config = preferences.load();
     const String token;
 
+    // dht.begin();
+
     if (!wifiConnected){
+        config = preferences.load();
+
         if(config.code == ""){
             accessPointManager.begin(ssid, password);
         } else {
             wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
+            auth.handle();
+
+            // show message - sensor is authorized on display
+            Serial.println("sensor is authorized");
+            delay(2000);
         }
     }
-
-    // format json
-    String json = "{\"temperature\": 25.6}";
-    String response;
-
-    apiService.post("/core/api/v1/tools/auth", json, response);
-    apiService.setToken(""); // set token from response
 
     // if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)){
     //     Serial.println(F("Не удалось инициализировать OLED дисплей"));
@@ -68,8 +71,6 @@ void App::setup(){
     // display.setCursor(0, 0);
     // display.println("WSTREET SMART LAB");
     // display.display();
-
-    // dht.begin();
 }
 
 void App::loop(){
