@@ -9,7 +9,7 @@
 #include <Wire.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_SSD1306.h>
-#include <Http/services/ApiService.h>
+#include <Services/ApiService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
 

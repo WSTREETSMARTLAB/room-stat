@@ -1,10 +1,10 @@
 #include <Network/AccessPointManager.h>
 #include <Validators/ToolPreferencesValidator.h>
 #include <Storage/ToolPreferences.h>
-#include <Http/views/ToolConfigSetupHtml.h>
-#include <Http/views/ValidationErrorHtml.h>
-#include <Http/views/ValidationSuccessHtml.h>
-#include <Http/views/RebootingHtml.h>
+#include <Html/ToolConfigSetupHtml.h>
+#include <Html/ValidationErrorHtml.h>
+#include <Html/ValidationSuccessHtml.h>
+#include <Html/RebootingHtml.h>
 #include <Esp.h>
 
 WebServer* AccessPointManager::_server = nullptr;
