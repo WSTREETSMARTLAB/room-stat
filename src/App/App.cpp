@@ -6,21 +6,12 @@
 #include <Network/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
 #include <DHT.h>
-#include <Wire.h>
-#include <Adafruit_GFX.h>
-#include <Adafruit_SSD1306.h>
 #include <Services/ApiService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
 
 #define DHT_PIN 4
 #define DHT_TYPE DHT22
-
-#define SCREEN_WIDTH 128
-#define SCREEN_HEIGHT 32
-
-#define OLED_RESET -1
-#define SCREEN_ADDRESS 0x3C
 
 const char* serverUrl = "http://192.168.0.100:8080";
 
@@ -30,7 +21,6 @@ WiFiPointManager wifiPointManager;
 ToolPreferences preferences;
 ToolConfig config;
 DHT dht(DHT_PIN, DHT_TYPE);
-Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_ADDRESS);
 ApiService apiService(serverUrl);
 AuthProcess auth(apiService, config);
 ConnectionProcess connection(accessPointManager, wifiPointManager);
@@ -69,15 +59,6 @@ void App::loop(){
         Serial.println("Не удалось считать данные с DHT22");
         return;
     }
-
-    display.clearDisplay();
-    display.setTextSize(2);
-    display.setCursor(0, 0);
-    display.print(temperature, 1);
-    display.println(" C, ");
-    display.print(humidity, 1);
-    display.println(" %");
-    display.display();
 
     Serial.println("===== Sensor Data: =====");
     Serial.print("Temperature: ");
