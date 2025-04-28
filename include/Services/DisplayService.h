@@ -15,4 +15,5 @@ public:
     void turnOn();
 
     void message(const String message);
+    void loader(bool (*condition)(), const String message);
 };

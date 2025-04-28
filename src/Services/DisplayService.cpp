@@ -7,7 +7,7 @@
 #define SCREEN_ADDRESS 0x3C
 
 DisplayService::DisplayService()
-    : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_ADDRESS)
+    : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET)
 {}
 
 bool DisplayService::begin(){
@@ -37,9 +37,30 @@ void DisplayService::turnOff(){
 
 void DisplayService::message(const String message){
     display.clearDisplay();
-    display.setTextSize(2);
+    display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
     display.setCursor(0, 0);
-    display.println(message);
+    display.print(message);
     display.display();
+}
+
+void DisplayService::loader(bool (*condition)(), const String message){
+    uint8_t dotCount = 0;
+    while (!condition()){
+        display.clearDisplay();
+        display.setTextSize(1);
+        display.setTextColor(SSD1306_WHITE);
+        display.setCursor(0, 0);
+        display.print(message);
+
+        for (uint8_t i = 0; i < dotCount; i++){
+            display.print(".");
+        }
+
+        display.display();
+        delay(500);
+        
+        dotCount = (dotCount + 1) % 4;
+    }
+    
 }

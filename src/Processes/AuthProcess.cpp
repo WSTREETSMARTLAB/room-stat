@@ -3,11 +3,12 @@
 #include <Network/WiFiPointManager.h>
 
 
-AuthProcess::AuthProcess(ApiService& apiServices, ToolConfig config)
-    : apiService(apiService), config(config), endpoint("/core/api/v1/tools/auth")
+AuthProcess::AuthProcess(ApiService& apiServices, ToolConfig config, DisplayService& display)
+    : apiService(apiService), config(config), endpoint("/core/api/v1/tools/auth"), display(display)
 {}
 
 void AuthProcess::handle(){
+    display.message("Auth Tool");
     StaticJsonDocument<256> doc;
     doc["type"] = config.type;
     doc["code"] = config.code;
@@ -22,9 +23,8 @@ void AuthProcess::handle(){
         DeserializationError error = deserializeJson(resDoc, response);
 
         if (error){
-            Serial.println("sensor is unauthorized");
+            display.message("Auth Error");
             delay(2000);
-            // show Auth Error message on display
             return;
         }
         
@@ -32,6 +32,8 @@ void AuthProcess::handle(){
 
         if (token.length() > 0){
             apiService.setToken(token);
+            display.message("Auth Success");
+            delay(2000);
         }
     }
 }

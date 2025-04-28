@@ -24,14 +24,13 @@ ToolConfig config;
 DHT dht(DHT_PIN, DHT_TYPE);
 ApiService apiService(serverUrl);
 DisplayService display;
-AuthProcess auth(apiService, config);
-ConnectionProcess connection(accessPointManager, wifiPointManager);
+AuthProcess auth(apiService, config, display);
+ConnectionProcess connection(accessPointManager, wifiPointManager, display);
 
 void App::setup(){
     display.begin();
     display.message("WSTREET LAB");
     delay(2000);
-    
 
     bool wifiConnected = WiFiPointManager::isConnected();
     const String token;
@@ -45,19 +44,12 @@ void App::setup(){
     auth.handle();
 
     // show message - sensor is authorized on display
-    Serial.println("sensor is ready");
+    display.message("Ready!");
     delay(2000);
 }
 
 void App::loop(){
     server.handleClient();
-
-    Serial.println("===== Wi Fi Connected. Device Data: =====");
-    Serial.println("Type: " + config.type);
-    Serial.println("Code: " + config.code);
-    Serial.println("Wi-Fi SSID: " + config.wifi_ssid);
-    Serial.println("Wi-Fi пароль: " + config.wifi_pass);
-    Serial.println("===========================");
 
     float temperature = dht.readTemperature();
     float humidity = dht.readHumidity();
