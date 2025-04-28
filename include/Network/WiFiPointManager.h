@@ -7,7 +7,7 @@ private:
     String _ssid;
     String _password;
 public:
-    bool connect(const String ssid, const String password);
-    bool isConnected() const;
+    void connect(const String ssid, const String password);
+    static bool isConnected();
     IPAddress getIP() const;
 };
