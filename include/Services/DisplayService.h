@@ -13,4 +13,6 @@ public:
     void clear();
     void turnOff();
     void turnOn();
+
+    void message(const String message);
 };

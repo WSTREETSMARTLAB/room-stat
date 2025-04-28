@@ -7,6 +7,7 @@
 #include <DTO/ToolConfig.h>
 #include <DHT.h>
 #include <Services/ApiService.h>
+#include <Services/DisplayService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
 
@@ -22,10 +23,16 @@ ToolPreferences preferences;
 ToolConfig config;
 DHT dht(DHT_PIN, DHT_TYPE);
 ApiService apiService(serverUrl);
+DisplayService display;
 AuthProcess auth(apiService, config);
 ConnectionProcess connection(accessPointManager, wifiPointManager);
 
 void App::setup(){
+    display.begin();
+    display.message("WSTREET LAB");
+    delay(2000);
+    
+
     bool wifiConnected = WiFiPointManager::isConnected();
     const String token;
 
