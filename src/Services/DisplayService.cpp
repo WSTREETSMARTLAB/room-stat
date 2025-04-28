@@ -35,13 +35,14 @@ void DisplayService::turnOff(){
     display.ssd1306_command(SSD1306_DISPLAYOFF);
 }
 
-void DisplayService::message(const String message){
+void DisplayService::message(const String message, uint16_t delayMs){
     display.clearDisplay();
     display.setTextSize(1);
     display.setTextColor(SSD1306_WHITE);
     display.setCursor(0, 0);
     display.print(message);
     display.display();
+    delay(delayMs);
 }
 
 void DisplayService::loader(bool (*condition)(), const String message){

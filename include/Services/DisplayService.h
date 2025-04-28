@@ -14,6 +14,6 @@ public:
     void turnOff();
     void turnOn();
 
-    void message(const String message);
+    void message(const String message, uint16_t delayMs);
     void loader(bool (*condition)(), const String message);
 };

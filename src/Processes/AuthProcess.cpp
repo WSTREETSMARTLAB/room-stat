@@ -8,7 +8,7 @@ AuthProcess::AuthProcess(ApiService& apiServices, ToolConfig config, DisplayServ
 {}
 
 void AuthProcess::handle(){
-    display.message("Auth Tool");
+    display.message("Auth Tool", 3000);
     StaticJsonDocument<256> doc;
     doc["type"] = config.type;
     doc["code"] = config.code;
@@ -23,8 +23,7 @@ void AuthProcess::handle(){
         DeserializationError error = deserializeJson(resDoc, response);
 
         if (error){
-            display.message("Auth Error");
-            delay(2000);
+            display.message("Auth Error", 2000);
             return;
         }
         
@@ -32,8 +31,7 @@ void AuthProcess::handle(){
 
         if (token.length() > 0){
             apiService.setToken(token);
-            display.message("Auth Success");
-            delay(2000);
+            display.message("Auth Success", 2000);
         }
     }
 }

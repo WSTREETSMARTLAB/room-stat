@@ -15,10 +15,11 @@ display(display)
 void ConnectionProcess::handle(){
     if(config.code == ""){
         accessPointManager.begin(ssid, pass);
+        display.message("Access Point Created", 3000);
     } else {
+        display.message("Connecting to Wi-Fi...", 1000);
         wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
         display.loader(WiFiPointManager::isConnected, "Connecting Wi-Fi");
-        delay(2000);
-        display.message("Wi-Fi Connected");
+        display.message("Wi-Fi Connected", 3000);
     }
 }

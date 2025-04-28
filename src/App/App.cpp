@@ -29,8 +29,7 @@ ConnectionProcess connection(accessPointManager, wifiPointManager, display);
 
 void App::setup(){
     display.begin();
-    display.message("WSTREET LAB");
-    delay(2000);
+    display.message("WSTREET LAB", 5000);
 
     bool wifiConnected = WiFiPointManager::isConnected();
     const String token;
@@ -43,9 +42,7 @@ void App::setup(){
 
     auth.handle();
 
-    // show message - sensor is authorized on display
-    display.message("Ready!");
-    delay(2000);
+    display.message("Ready!", 3000);
 }
 
 void App::loop(){
