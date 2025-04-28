@@ -9,3 +9,28 @@
 DisplayService::DisplayService()
     : display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, SCREEN_ADDRESS)
 {}
+
+bool DisplayService::begin(){
+    if (!display.begin(SSD1306_SWITCHCAPVCC, SCREEN_ADDRESS)) {
+        Serial.println(F("SSD1306 allocation failed"));
+        return false;
+    }
+
+    display.clearDisplay();
+    display.display();
+
+    return true;
+}
+
+void DisplayService::clear(){
+    display.clearDisplay();
+    display.display();
+}
+
+void DisplayService::turnOn(){
+    display.ssd1306_command(SSD1306_DISPLAYON);
+}
+
+void DisplayService::turnOff(){
+    display.ssd1306_command(SSD1306_DISPLAYOFF);
+}

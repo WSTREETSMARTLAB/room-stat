@@ -9,4 +9,8 @@ private:
     Adafruit_SSD1306 display;
 public:
     DisplayService();
+    bool begin();
+    void clear();
+    void turnOff();
+    void turnOn();
 };
