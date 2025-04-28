@@ -2,7 +2,6 @@
 #include <WiFi.h>
 
 void WiFiPointManager::connect(const String ssid, const String password) {
-    
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str());
     unsigned long startAttemptTime = millis();

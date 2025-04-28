@@ -25,21 +25,15 @@ DHT dht(DHT_PIN, DHT_TYPE);
 ApiService apiService(serverUrl);
 DisplayService display;
 AuthProcess auth(apiService, config, display);
-ConnectionProcess connection(accessPointManager, wifiPointManager, display);
+ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
 
 void App::setup(){
     display.begin();
-    display.message("WSTREET LAB", 5000);
-
-    bool wifiConnected = WiFiPointManager::isConnected();
-    const String token;
+    display.logo(5000);
 
     // dht.begin();
 
-    if (!wifiConnected){
-        connection.handle();
-    }
-
+    connection.handle();
     auth.handle();
 
     display.message("Ready!", 3000);

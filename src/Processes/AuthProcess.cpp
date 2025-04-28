@@ -8,6 +8,10 @@ AuthProcess::AuthProcess(ApiService& apiServices, ToolConfig config, DisplayServ
 {}
 
 void AuthProcess::handle(){
+    if (!WiFiPointManager::isConnected){
+        return;
+    }
+
     display.message("Auth Tool", 3000);
     StaticJsonDocument<256> doc;
     doc["type"] = config.type;
