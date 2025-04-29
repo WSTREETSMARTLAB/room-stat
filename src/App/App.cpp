@@ -11,6 +11,8 @@
 #include <Services/DisplayService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
+#include <Processes/DataCollectingProcess.h>
+#include <DTO/DataConfig.h>
 
 WebServer server(80);
 DHTService dhtService;
@@ -22,10 +24,14 @@ ToolPreferences preferences;
 ToolConfig config;
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
 AuthProcess auth(apiService, config, display);
+DataCollectingProcess dataCollecting(dhtService);
+DataConfig data;
 
 void App::setup(){
     display.begin();
     display.logo(5000);
+
+    dhtService.begin();
 
     connection.handle();
     auth.handle();
@@ -35,4 +41,11 @@ void App::setup(){
 
 void App::loop(){
     server.handleClient();
+
+    data = dataCollecting.handle();
+
+    Serial.print("Temperature: ");
+    Serial.println(data.temperature);
+    Serial.print("Humidity: ");
+    Serial.println(data.humidity);
 }

@@ -1,3 +1,5 @@
+#pragma once
+
 struct DataConfig
 {
     float temperature;
