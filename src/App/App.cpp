@@ -1,4 +1,5 @@
 #include <App/App.h>
+#include <App/Config.h>
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
@@ -11,8 +12,6 @@
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
 
-const char* serverUrl = "http://192.168.0.100:8080";
-
 WebServer server(80);
 DHTService dhtService;
 ApiService apiService(serverUrl);
@@ -21,8 +20,8 @@ AccessPointManager accessPointManager(server);
 WiFiPointManager wifiPointManager;
 ToolPreferences preferences;
 ToolConfig config;
-AuthProcess auth(apiService, config, display);
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
+AuthProcess auth(apiService, config, display);
 
 void App::setup(){
     display.begin();
