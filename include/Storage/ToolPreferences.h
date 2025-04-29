@@ -6,7 +6,7 @@ class ToolPreferences
 {
 private:
 public:
-    ToolPreferences(/* args */);
+    ToolPreferences();
     void save(const ToolConfig& config);
     ToolConfig load();
 };

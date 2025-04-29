@@ -1,16 +1,19 @@
 #include <Processes/AuthProcess.h>
 #include <ArduinoJson.h>
 #include <Network/WiFiPointManager.h>
+#include <DTO/ToolConfig.h>
 
-
-AuthProcess::AuthProcess(ApiService& apiServices, ToolConfig config, DisplayService& display)
-    : apiService(apiService), config(config), endpoint("/core/api/v1/tools/auth"), display(display)
+AuthProcess::AuthProcess(ApiService& apiServices, ToolPreferences& preferences, DisplayService& display)
+    : apiService(apiService), endpoint("/core/api/v1/tools/auth"), preferences(preferences), display(display)
 {}
 
 void AuthProcess::handle(){
     if (!WiFiPointManager::isConnected){
         return;
     }
+
+    ToolConfig config;
+    config = preferences.load();
 
     display.message("Auth Tool", 3000);
     StaticJsonDocument<256> doc;
