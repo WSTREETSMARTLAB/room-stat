@@ -22,7 +22,7 @@ DisplayService display;
 AccessPointManager accessPointManager(server);
 WiFiPointManager wifiPointManager;
 ToolPreferences preferences;
-HealthCheckProcess healthCheck(apiService);
+HealthCheckProcess healthCheck(apiService, display);
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
 AuthProcess auth(apiService, preferences, display);
 DataCollectingProcess dataCollecting(dhtService);

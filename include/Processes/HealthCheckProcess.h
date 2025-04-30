@@ -1,12 +1,13 @@
 #pragma once
 #include <Services/ApiService.h>
+#include <Services/DisplayService.h>
 
 class HealthCheckProcess
 {
 private:
-    bool _serverAlive;
     ApiService& apiService;
+    DisplayService& display;
 public:
-    HealthCheckProcess(ApiService& apiService);
+    HealthCheckProcess(ApiService& apiService, DisplayService& display);
     void handle();
 };

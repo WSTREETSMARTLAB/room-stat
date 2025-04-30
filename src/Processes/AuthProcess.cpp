@@ -9,7 +9,7 @@ AuthProcess::AuthProcess(ApiService& apiServices, ToolPreferences& preferences, 
 {}
 
 void AuthProcess::handle(){
-    if (!WiFiPointManager::isConnected || !serverAlive){
+    if (!WiFiPointManager::isConnected() || !serverAlive){
         return;
     }
 

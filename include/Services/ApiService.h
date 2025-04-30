@@ -6,6 +6,7 @@ class ApiService
 {
 private:
     const String baseUrl;
+    bool handleResponse(HTTPClient& http, int httpCode, String& response);
 public:
     ApiService(const String& url);
 
