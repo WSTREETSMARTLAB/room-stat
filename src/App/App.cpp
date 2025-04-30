@@ -19,8 +19,8 @@ WebServer server(80);
 DHTService dhtService;
 ApiService apiService(serverUrl);
 DisplayService display;
-AccessPointManager accessPointManager(server);
-WiFiPointManager wifiPointManager;
+AccessPointManager accessPointManager(server, display);
+WiFiPointManager wifiPointManager(display);
 ToolPreferences preferences;
 HealthCheckProcess healthCheck(apiService, display);
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
@@ -30,10 +30,9 @@ DataConfig data;
 
 void App::setup(){
     display.begin();
-    display.logo(5000);
+    display.message("Setup", 2000);
 
     dhtService.begin();
-
     connection.handle();
     healthCheck.handle();
     auth.handle();

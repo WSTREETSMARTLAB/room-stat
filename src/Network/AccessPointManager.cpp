@@ -9,7 +9,9 @@
 
 WebServer* AccessPointManager::_server = nullptr;
 
-AccessPointManager::AccessPointManager(WebServer& server) {
+AccessPointManager::AccessPointManager(WebServer& server, DisplayService& display)
+: display(display) 
+{
     _server = &server;
 }
 
@@ -20,6 +22,10 @@ void AccessPointManager::begin(String ssid, String password){
     _server->on("/submit", HTTP_POST, handleSubmit);
     _server->on("/reboot", HTTP_POST, handleReboot);
     _server->begin();
+    display.message("Access Point Started", 3000);
+    display.message("Please connect to Room-Stat-Setup, ...", 2000);
+    display.message("...open 192.168.4.1 in browser...", 2000);
+    display.message("...and set your Wi-Fi credentials", 2000);
 };
 
 void AccessPointManager::handleRoot(){
