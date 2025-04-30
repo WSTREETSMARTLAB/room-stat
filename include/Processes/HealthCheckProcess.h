@@ -1,4 +1,4 @@
-#pragma once;
+#pragma once
 #include <Services/ApiService.h>
 
 class HealthCheckProcess
