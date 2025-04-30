@@ -9,9 +9,6 @@ void HealthCheckProcess::handle(){
     String response;
     serverAlive = apiService.get("/core/api/v1/health-check", response);
 
-    Serial.println(response);
-    delay(10000);
-
     if (serverAlive){
         display.message("Server is ready", 2000);
     } else {

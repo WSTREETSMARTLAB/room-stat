@@ -11,7 +11,6 @@ private:
     ToolPreferences& preferences;
     ToolConfig config;
     DisplayService& display;
-    const String endpoint;
 public:
     AuthProcess(ApiService& apiService, ToolPreferences& preferences, DisplayService& display);
     void handle();

@@ -1,5 +1,4 @@
 #include <App/App.h>
-#include <App/Config.h>
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
@@ -17,7 +16,7 @@
 
 WebServer server(80);
 DHTService dhtService;
-ApiService apiService(serverUrl);
+ApiService apiService;
 DisplayService display;
 AccessPointManager accessPointManager(server, display);
 WiFiPointManager wifiPointManager(display);

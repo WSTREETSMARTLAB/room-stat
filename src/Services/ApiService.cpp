@@ -2,10 +2,6 @@
 #include <Network/WiFiPointManager.h>
 #include <App/State.h>
 
-ApiService::ApiService(const String& url): baseUrl(url)
-{
-}
-
 bool ApiService::get(const String& endpoint, String& response)
 {
     if (!WiFiPointManager::isConnected()) {
@@ -14,7 +10,7 @@ bool ApiService::get(const String& endpoint, String& response)
     }
 
     HTTPClient http;
-    http.begin(baseUrl + endpoint);
+    http.begin(serverUrl + endpoint);
     int httpCode = http.GET();
 
     return handleResponse(http, httpCode, response);
@@ -28,10 +24,10 @@ bool ApiService::post(const String& endpoint, const String& payload, String& res
     }
 
     HTTPClient http;
-    http.begin(baseUrl + endpoint);
+    http.begin(serverUrl + endpoint);
     http.addHeader("Content-Type", "application/json");
     
-    if (token.length() > 0) {
+    if (token != "") {
         http.addHeader("Authorization", "Bearer " + token);
     }
 

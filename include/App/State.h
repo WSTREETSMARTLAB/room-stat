@@ -3,3 +3,4 @@
 
 extern bool serverAlive;
 extern String token;
+extern String serverUrl;
