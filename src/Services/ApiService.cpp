@@ -1,35 +1,19 @@
 #include <Services/ApiService.h>
 #include <Network/WiFiPointManager.h>
+#include <App/State.h>
 
-ApiService::ApiService(const String& url): baseUrl(url)
+bool ApiService::get(const String& endpoint, String& response)
 {
-}
-
-void ApiService::setToken(const String& token) {
-    _token = token;
-}
-
-String ApiService::getToken() const {
-    return _token;
-}
-
-String ApiService::get(const String& endpoint)
-{
-    if (!WiFiPointManager::isConnected()) return "Network Error";
-
-    HTTPClient http;
-    http.begin(baseUrl + endpoint);
-    int httpCode = http.GET();
-
-    String response;
-
-    if (httpCode > 0){
-        response = http.getString();
+    if (!WiFiPointManager::isConnected()) {
+        response = "Network Error";
+        return false;
     }
 
-    http.end();
+    HTTPClient http;
+    http.begin(serverUrl + endpoint);
+    int httpCode = http.GET();
 
-    return response;
+    return handleResponse(http, httpCode, response);
 }
 
 bool ApiService::post(const String& endpoint, const String& payload, String& response)
@@ -40,21 +24,26 @@ bool ApiService::post(const String& endpoint, const String& payload, String& res
     }
 
     HTTPClient http;
-    http.begin(baseUrl + endpoint);
+    http.begin(serverUrl + endpoint);
     http.addHeader("Content-Type", "application/json");
     
-    if (_token.length() > 0) {
-        http.addHeader("Authorization", "Bearer " + _token);
+    if (token != "") {
+        http.addHeader("Authorization", "Bearer " + token);
     }
 
     int httpCode = http.POST(payload);
 
+    return handleResponse(http, httpCode, response);
+}
+
+bool ApiService::handleResponse(HTTPClient& http, int httpCode, String& response)
+{
     if (httpCode > 0) {
         response = http.getString();
         http.end();
         return true;
     } else {
-        response = "POST failed: " + http.errorToString(httpCode);
+        response = "Request failed: " + http.errorToString(httpCode);
         http.end();
         return false;
     }

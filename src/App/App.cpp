@@ -1,5 +1,4 @@
 #include <App/App.h>
-#include <App/Config.h>
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
@@ -13,27 +12,28 @@
 #include <Processes/ConnectionProcess.h>
 #include <Processes/DataCollectingProcess.h>
 #include <DTO/DataConfig.h>
+#include <Processes/HealthCheckProcess.h>
 
 WebServer server(80);
 DHTService dhtService;
-ApiService apiService(serverUrl);
+ApiService apiService;
 DisplayService display;
-AccessPointManager accessPointManager(server);
-WiFiPointManager wifiPointManager;
+AccessPointManager accessPointManager(server, display);
+WiFiPointManager wifiPointManager(display);
 ToolPreferences preferences;
-ToolConfig config;
+HealthCheckProcess healthCheck(apiService, display);
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
-AuthProcess auth(apiService, config, display);
+AuthProcess auth(apiService, preferences, display);
 DataCollectingProcess dataCollecting(dhtService);
 DataConfig data;
 
 void App::setup(){
     display.begin();
-    display.logo(5000);
+    display.message("Setup", 2000);
 
     dhtService.begin();
-
     connection.handle();
+    healthCheck.handle();
     auth.handle();
 
     display.message("Ready!", 3000);

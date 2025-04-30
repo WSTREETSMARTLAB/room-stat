@@ -5,13 +5,8 @@
 class ApiService
 {
 private:
-    const String baseUrl;
-    String _token;
+    bool handleResponse(HTTPClient& http, int httpCode, String& response);
 public:
-    ApiService(const String& url);
-    void setToken(const String& token);
-    String getToken() const;
-
-    String get(const String& endpoint);
+    bool get(const String& endpoint, String& response);
     bool post(const String& endpoint, const String& payload, String& response);
 };

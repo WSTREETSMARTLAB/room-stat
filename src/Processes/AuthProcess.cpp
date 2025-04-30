@@ -2,13 +2,14 @@
 #include <ArduinoJson.h>
 #include <Network/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
+#include <App/State.h>
 
 AuthProcess::AuthProcess(ApiService& apiServices, ToolPreferences& preferences, DisplayService& display)
-    : apiService(apiService), endpoint("/core/api/v1/tools/auth"), preferences(preferences), display(display)
+    : apiService(apiService), preferences(preferences), display(display)
 {}
 
 void AuthProcess::handle(){
-    if (!WiFiPointManager::isConnected){
+    if (!WiFiPointManager::isConnected() || !serverAlive){
         return;
     }
 
@@ -25,7 +26,8 @@ void AuthProcess::handle(){
 
     String response;
 
-    if(apiService.post(endpoint, payload, response)){
+    display.message("Sending Auth Request", 2000);
+    if(apiService.post("/core/api/v1/tools/auth", payload, response)){
         StaticJsonDocument<256> resDoc;
         DeserializationError error = deserializeJson(resDoc, response);
 
@@ -34,11 +36,12 @@ void AuthProcess::handle(){
             return;
         }
         
-        String token = resDoc["token"] | "";
+        token = resDoc["token"] | "";
 
-        if (token.length() > 0){
-            apiService.setToken(token);
+        if (token != ""){
             display.message("Auth Success", 2000);
+        } else {
+            display.message("Auth Error", 2000);
         }
     }
 }
