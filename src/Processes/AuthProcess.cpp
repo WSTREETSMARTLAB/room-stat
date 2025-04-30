@@ -2,13 +2,14 @@
 #include <ArduinoJson.h>
 #include <Network/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
+#include <App/State.h>
 
 AuthProcess::AuthProcess(ApiService& apiServices, ToolPreferences& preferences, DisplayService& display)
     : apiService(apiService), endpoint("/core/api/v1/tools/auth"), preferences(preferences), display(display)
 {}
 
 void AuthProcess::handle(){
-    if (!WiFiPointManager::isConnected){
+    if (!WiFiPointManager::isConnected || !serverAlive){
         return;
     }
 
@@ -34,11 +35,12 @@ void AuthProcess::handle(){
             return;
         }
         
-        String token = resDoc["token"] | "";
+        token = resDoc["token"] | "";
 
         if (token.length() > 0){
-            apiService.setToken(token);
             display.message("Auth Success", 2000);
+        } else {
+            display.message("Auth Error", 2000);
         }
     }
 }
