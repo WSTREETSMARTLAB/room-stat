@@ -13,6 +13,7 @@
 #include <Processes/ConnectionProcess.h>
 #include <Processes/DataCollectingProcess.h>
 #include <DTO/DataConfig.h>
+#include <Processes/HealthCheckProcess.h>
 
 WebServer server(80);
 DHTService dhtService;
@@ -21,9 +22,9 @@ DisplayService display;
 AccessPointManager accessPointManager(server);
 WiFiPointManager wifiPointManager;
 ToolPreferences preferences;
-ToolConfig config;
+HealthCheckProcess healthCheck(apiService);
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
-AuthProcess auth(apiService, config, display);
+AuthProcess auth(apiService, preferences, display);
 DataCollectingProcess dataCollecting(dhtService);
 DataConfig data;
 
@@ -34,6 +35,7 @@ void App::setup(){
     dhtService.begin();
 
     connection.handle();
+    healthCheck.handle();
     auth.handle();
 
     display.message("Ready!", 3000);
