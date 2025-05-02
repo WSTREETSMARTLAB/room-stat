@@ -14,19 +14,21 @@
 #include <DTO/DataConfig.h>
 #include <Processes/HealthCheckProcess.h>
 #include <Processes/VizualizationDataProcess.h>
+#include <Processes/TransmitDataProcess.h>
 
 WebServer server(80);
 DHTService dhtService;
-ApiService apiService;
+ApiService api;
 DisplayService display;
 AccessPointManager accessPointManager(server, display);
 WiFiPointManager wifiPointManager(display);
 ToolPreferences preferences;
-HealthCheckProcess healthCheck(apiService, display);
+HealthCheckProcess healthCheck(api, display);
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
-AuthProcess auth(apiService, preferences, display);
+AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dhtService);
 VizualizationDataProcess vizualization(display);
+TransmitDataProcess transmit(api);
 DataConfig data;
 
 void App::setup(){
@@ -46,5 +48,6 @@ void App::loop(){
 
     data = dataCollecting.handle();
 
+    transmit.handle(data);
     vizualization.handle(data);
 }
