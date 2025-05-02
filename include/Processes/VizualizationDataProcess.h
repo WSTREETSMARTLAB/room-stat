@@ -2,11 +2,11 @@
 #include <Services/DisplayService.h>
 #include <DTO/DataConfig.h>
 
-class VizualizeDataProcess
+class VizualizationDataProcess
 {
 private:
     DisplayService& display;
 public:
-    VizualizeDataProcess(DisplayService& display);
-    void handle(DataConfig data);
+    VizualizationDataProcess(DisplayService& display);
+    void handle(DataConfig& data);
 };

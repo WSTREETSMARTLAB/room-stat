@@ -107,5 +107,23 @@ void DisplayService::loader(bool (*condition)(), const String message){
         
         dotCount = (dotCount + 1) % 4;
     }
-    
+}
+
+void DisplayService::parameterScreen(String content, bool wifiStatus)
+{
+    display.clearDisplay();
+    display.setTextSize(1);
+    display.setTextColor(SSD1306_WHITE);
+    display.setCursor(0, 0);
+
+    display.setCursor(0, 0);
+    display.print("RoomStat");
+
+    display.setCursor(90, 0);
+    display.print(wifiStatus ? "[WiFi]" : "[ - ]");
+
+    display.setCursor(0, 12);
+    display.print(content);
+
+    display.display();
 }

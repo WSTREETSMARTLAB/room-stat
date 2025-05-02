@@ -13,6 +13,7 @@
 #include <Processes/DataCollectingProcess.h>
 #include <DTO/DataConfig.h>
 #include <Processes/HealthCheckProcess.h>
+#include <Processes/VizualizationDataProcess.h>
 
 WebServer server(80);
 DHTService dhtService;
@@ -25,6 +26,7 @@ HealthCheckProcess healthCheck(apiService, display);
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
 AuthProcess auth(apiService, preferences, display);
 DataCollectingProcess dataCollecting(dhtService);
+VizualizationDataProcess vizualization(display);
 DataConfig data;
 
 void App::setup(){
@@ -44,8 +46,5 @@ void App::loop(){
 
     data = dataCollecting.handle();
 
-    Serial.print("Temperature: ");
-    Serial.println(data.temperature);
-    Serial.print("Humidity: ");
-    Serial.println(data.humidity);
+    vizualization.handle(data);
 }
