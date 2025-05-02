@@ -32,16 +32,19 @@ void AuthProcess::handle(){
         DeserializationError error = deserializeJson(resDoc, response);
 
         if (error){
-            display.message("Auth Error", 2000);
+            display.message("Server Error", 2000);
             return;
         }
         
-        token = resDoc["token"] | "";
+        token = resDoc["data"]["token"] | "";
 
         if (token != ""){
-            display.message("Auth Success", 2000);
+            display.message("Tool authorized", 2000);
+            display.message("Now you can use a dashboard", 2000);
+            display.message("www.wstreetsmartlab.systems", 2000);
         } else {
-            display.message("Auth Error", 2000);
+            display.message("Token not received", 2000);
+            display.message("Please check a code", 2000);
         }
     }
 }
