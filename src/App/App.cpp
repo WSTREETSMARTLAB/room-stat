@@ -7,6 +7,7 @@
 #include <DTO/ToolConfig.h>
 #include <Services/ApiService.h>
 #include <Services/DHTService.h>
+#include <Services/LDRService.h>
 #include <Services/DisplayService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
@@ -17,7 +18,8 @@
 #include <Processes/TransmitDataProcess.h>
 
 WebServer server(80);
-DHTService dhtService;
+DHTService dht;
+LDRService ldr;
 ApiService api;
 DisplayService display;
 AccessPointManager accessPointManager(server, display);
@@ -26,7 +28,7 @@ ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
 ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
 AuthProcess auth(api, preferences, display);
-DataCollectingProcess dataCollecting(dhtService);
+DataCollectingProcess dataCollecting(dht, ldr);
 VizualizationDataProcess vizualization(display);
 TransmitDataProcess transmit(api);
 DataConfig data;
@@ -35,7 +37,7 @@ void App::setup(){
     display.begin();
     display.message("Setup", 2000);
 
-    dhtService.begin();
+    dht.begin();
     connection.handle();
     healthCheck.handle();
     auth.handle();
@@ -48,6 +50,9 @@ void App::loop(){
 
     data = dataCollecting.handle();
 
-    transmit.handle(data);
+    if (WiFiPointManager::isConnected){
+        transmit.handle(data);    
+    }
+    
     vizualization.handle(data);
 }

@@ -10,7 +10,8 @@ void VizualizationDataProcess::handle(DataConfig& data)
     String content;
     String temp = "T: " + String(data.temperature, 1) + "C";
     String hum  = "H: " + String(data.humidity, 0) + "%";
-    content = temp + "\n" + hum;
+    String light = "L: " + String(data.light) + "%";
+    content = temp + "\n" + hum + "\n" + light;
 
     display.parameterScreen(content, WiFiPointManager::isConnected());
 }

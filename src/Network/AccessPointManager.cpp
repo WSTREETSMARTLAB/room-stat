@@ -17,6 +17,7 @@ AccessPointManager::AccessPointManager(WebServer& server, DisplayService& displa
 
 void AccessPointManager::begin(String ssid, String password){
     WiFi.softAP(ssid, password);
+    delay(500);
     IPAddress IP = WiFi.softAPIP();
     _server->on("/", HTTP_GET, handleRoot);
     _server->on("/submit", HTTP_POST, handleSubmit);
