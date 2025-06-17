@@ -14,11 +14,10 @@ void ConnectionProcess::handle(){
     ToolConfig config;
     config = preferences.load();
 
-    if(config.code == ""){
-        accessPointManager.begin(ssid, pass);
-    } else {
-        wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
-    }
+    bool success = wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
 
-    
+    if (!success) {
+        accessPointManager.begin(ssid, pass);
+        return;
+    }
 }

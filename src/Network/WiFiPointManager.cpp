@@ -5,13 +5,31 @@ WiFiPointManager::WiFiPointManager(DisplayService& display)
 : display(display)
 {}
 
-void WiFiPointManager::connect(const String ssid, const String password) {
+bool WiFiPointManager::connect(const String ssid, const String password) {
+    const int attempts = 3;
     WiFi.mode(WIFI_STA);
-    WiFi.begin(ssid.c_str(), password.c_str());
-    unsigned long startAttemptTime = millis();
-    unsigned long timeout = 10000;
-    String message = "Connecting to " + ssid;
-    display.loader(WiFiPointManager::isConnected, message);
+
+    for (int i = 0; i < attempts; i++){
+        WiFi.begin(ssid.c_str(), password.c_str());
+        String message = "Connecting to " + ssid;
+        display.loader(WiFiPointManager::isConnected, message);
+
+        const unsigned long timeout = 10000;
+        unsigned long startTime = millis();
+        while (WiFi.status() != WL_CONNECTED && millis() - startTime < timeout) {
+            delay(100);
+        }
+
+        if (isConnected()){
+            return true;
+        }
+
+        WiFi.disconnect();
+        delay(1000);
+    }
+        
+    return false;
+
 }
 
 bool WiFiPointManager::isConnected() {
