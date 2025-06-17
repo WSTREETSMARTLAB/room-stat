@@ -29,7 +29,6 @@ bool WiFiPointManager::connect(const String ssid, const String password) {
     }
         
     return false;
-
 }
 
 bool WiFiPointManager::isConnected() {

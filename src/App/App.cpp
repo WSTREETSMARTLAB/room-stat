@@ -50,9 +50,10 @@ void App::loop(){
 
     data = dataCollecting.handle();
 
-    if (WiFiPointManager::isConnected){
-        transmit.handle(data);    
+    if (!WiFiPointManager::isConnected()){
+        connection.handle();
     }
-    
+
+    transmit.handle(data);
     vizualization.handle(data);
 }
