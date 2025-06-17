@@ -117,7 +117,7 @@ void DisplayService::parameterScreen(String content, bool wifiStatus)
     display.setCursor(0, 0);
 
     display.setCursor(0, 0);
-    display.print("RoomStat");
+    display.print("Room v1");
 
     display.setCursor(80, 0);
     display.print(wifiStatus ? "[WiFi:+]" : "[WiFi:-]"); // set icons

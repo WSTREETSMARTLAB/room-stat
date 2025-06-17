@@ -1,5 +1,5 @@
 #include <App/State.h>
 
-String serverUrl = "http://192.168.0.100:8080";
+String serverUrl = "https://dev.wstreet.systems";
 bool serverAlive = false;
 String token = "";
