@@ -7,13 +7,32 @@ void ButtonService::begin(){
 }
 
 void ButtonService::update(){
+    bool currentState = digitalRead(buttonPin) == LOW;
+
+    if (currentState && !isPressed) {
+        isPressed = true;
+        pressStartTime = millis();
+    } 
+    
+    if (!currentState && isPressed) {
+        unsigned long pressDuration = millis() - pressStartTime;
+
+        if (pressDuration >= 3000) {
+            performReset();
+        } 
+        
+        if (pressDuration >= 100) {
+            toggleSleepMode();
+        }
+
+        isPressed = false;
+    }
+}
+
+void ButtonService::performReset(){
 
 }
 
-void ButtonService::reset(){
-
-}
-
-void ButtonService::sleep(){
+void ButtonService::toggleSleepMode(){
 
 }

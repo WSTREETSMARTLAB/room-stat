@@ -8,8 +8,8 @@ private:
     unsigned long pressStartTime = 0;
     bool isPressed = false;
 
-    void reset();
-    void sleep();
+    void performReset();
+    void toggleSleepMode();
 public:
     ButtonService(uint8_t buttonPin);
     void begin();
