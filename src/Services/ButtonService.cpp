@@ -30,7 +30,7 @@ void ButtonService::update(){
 }
 
 void ButtonService::performReset(){
-
+    
 }
 
 void ButtonService::toggleSleepMode(){
