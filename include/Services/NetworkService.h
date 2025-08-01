@@ -1,12 +1,15 @@
 #pragma once
 #include <WiFi.h>
 #include <Enum/NetworkState.h>
-#include <Services/DisplayService.h>
+#include <Network/WiFiPointManager.h>
+#include <Network/AccessPointManager.h>
 
-class NetworkManager
+class NetworkService
 {
 private:
     NetworkState state;
+    WiFiPointManager& wifi;
+    AccessPointManager& accessPoint;
     unsigned long stateStart;
     unsigned long lastCheck;
 
@@ -15,8 +18,11 @@ private:
     const unsigned long CHECK_INTERVAL = 5000;
     const unsigned long RECONNECT_TIMEOUT = 30000;
     const int MAX_RECONNECTION_ATTEMPTS = 3;
+
+    void evaluateState();
+    void transitionTo(NetworkState newState);
 public:
-    NetworkManager(DisplayService& display);
+    NetworkService(WiFiPointManager& wifi, AccessPointManager& accessPoint);
     void update();
     void attemptConnection(const String& ssid, const String& password);
     void startAP();
