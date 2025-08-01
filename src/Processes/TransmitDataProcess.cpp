@@ -17,7 +17,7 @@ void TransmitDataProcess::handle(DataConfig& data){
     String response;
     doc["temperature"] = data.temperature;
     doc["humidity"] = data.humidity;
-    doc["light"] = 98;
+    doc["light"] = data.light;
     serializeJson(doc, payload);
     api.post("/room-stat/api/v1/transmit", payload, response);
 

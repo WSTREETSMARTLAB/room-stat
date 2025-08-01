@@ -4,4 +4,5 @@ struct DataConfig
 {
     float temperature;
     float humidity;
+    int light;
 };
