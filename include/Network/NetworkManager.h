@@ -1,6 +1,7 @@
 #pragma once
 #include <WiFi.h>
 #include <Enum/NetworkState.h>
+#include <Services/DisplayService.h>
 
 class NetworkManager
 {
@@ -15,7 +16,7 @@ private:
     const unsigned long RECONNECT_TIMEOUT = 30000;
     const int MAX_RECONNECTION_ATTEMPTS = 3;
 public:
-    NetworkManager();
+    NetworkManager(DisplayService& display);
     void update();
     void attemptConnection(const String& ssid, const String& password);
     void startAP();
