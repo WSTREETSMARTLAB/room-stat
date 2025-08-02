@@ -3,11 +3,7 @@
 
 ConnectionProcess::ConnectionProcess(NetworkService& network, ToolPreferences& preferences): 
 network(network),
-preferences(preferences), 
-initialConnectionAttempted(false), 
-lastConfigCheck(0)
-{
-}
+preferences(preferences){}
 
 void ConnectionProcess::handle(){
     network.update();
