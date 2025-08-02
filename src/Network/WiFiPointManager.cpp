@@ -5,17 +5,11 @@ WiFiPointManager::WiFiPointManager(DisplayService& display)
 : display(display)
 {}
 
-bool WiFiPointManager::connect(const String ssid, const String password) {
+void WiFiPointManager::connect(const String ssid, const String password) {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str());
     String message = "Connecting to " + ssid;
-    display.loader(WiFiPointManager::isConnected, message);
-
-    const unsigned long timeout = 10000;
-    unsigned long startTime = millis();
-    while (!isConnected && millis() - startTime < timeout) {
-        delay(100);
-    }
+    display.loader([]() { return isConnected(); }, message);
 
     if (!isConnected()){
         WiFi.disconnect();

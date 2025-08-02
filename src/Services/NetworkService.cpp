@@ -28,7 +28,12 @@ void NetworkService::attemptConnection(const String& ssid, const String& passwor
         return;
     }
 
+    state = NetworkState::CONNECTING;
     wifi.connect(ssid, password);
+
+    if (wifi.isConnected){
+        state = NetworkState::CONNECTED;
+    }
 }
 
 void NetworkService::startAP(){
@@ -37,6 +42,8 @@ void NetworkService::startAP(){
     }
     
     accessPoint.begin("Room_Stat_Access", "");
+    state = NetworkState::AP_MODE;
+
 }
 
 void NetworkService::forceReconnection(){
@@ -64,7 +71,7 @@ void NetworkService::evaluateState(){
         }
         break;
     case NetworkState::CONNECTED:
-        if (!wifi.isConnected) {
+        if (!wifi.isConnected()) {
             newState = NetworkState::RECONNECTING;
         }
         break;
@@ -82,11 +89,7 @@ void NetworkService::evaluateState(){
                 reconnectionAttempts = 0;
             }
         break;
-    case NetworkState::AP_MODE:
-        if (state != NetworkState::AP_MODE){
-            startAP();
-        }
-        
+    case NetworkState::AP_MODE:        
         break;
     case NetworkState::ERROR:
         break;
