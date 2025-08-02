@@ -26,7 +26,8 @@ AccessPointManager accessPointManager(server, display);
 WiFiPointManager wifiPointManager(display);
 ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
-ConnectionProcess connection(accessPointManager, wifiPointManager, preferences);
+NetworkService network(wifiPointManager, accessPointManager);
+ConnectionProcess connection(network, preferences);
 AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);
 VizualizationDataProcess vizualization(display);
@@ -49,11 +50,7 @@ void App::loop(){
     server.handleClient();
 
     data = dataCollecting.handle();
-
-    if (!WiFiPointManager::isConnected()){
-        connection.handle();
-    }
-
+    connection.handle();
     transmit.handle(data);
     vizualization.handle(data);
 }

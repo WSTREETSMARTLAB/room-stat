@@ -10,7 +10,7 @@ private:
     DisplayService& display;
 public:
     WiFiPointManager(DisplayService& display);
-    bool connect(const String ssid, const String password);
+    void connect(const String ssid, const String password);
     static bool isConnected();
     IPAddress getIP() const;
 };
