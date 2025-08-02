@@ -2,7 +2,7 @@
 #include <Storage/ToolPreferences.h>
 
 ConnectionProcess::ConnectionProcess(NetworkService& network, ToolPreferences& preferences): 
-network(network), 
+network(network),
 preferences(preferences), 
 initialConnectionAttempted(false), 
 lastConfigCheck(0)
@@ -11,20 +11,11 @@ lastConfigCheck(0)
 
 void ConnectionProcess::handle(){
     network.update();
+    ToolConfig config = preferences.load();
 
-    if (millis() - lastConfigCheck >= 30000) {
-        ToolConfig config = preferences.load();
-        lastConfigCheck = millis();
-        
-        // Если есть сохраненные данные Wi-Fi и мы не подключены, пытаемся подключиться
-        if (config.wifi_ssid.length() > 0 && network.getCurrentState() == NetworkState::DISCONNECTED) {
-            attemptInitialConnection();
-        }
+    if (config.wifi_ssid.length() > 0) {
+        network.attemptConnection(config.wifi_ssid, config.wifi_pass);
+    } else {
+        network.startAP();
     }
-    // bool success = wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
-
-    // if (!success) {
-    //     accessPointManager.begin(ssid, pass);
-    //     return;
-    // }
 }

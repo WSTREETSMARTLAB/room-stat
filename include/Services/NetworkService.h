@@ -27,8 +27,6 @@ private:
     void evaluateState();
     void transitionTo(NetworkState newState);
     void updateMetrics(bool connectionSuccess);
-
-    void resetReconnectionAttempts();
 public:
     NetworkService(WiFiPointManager& wifi, AccessPointManager& accessPoint);
     void update();

@@ -58,7 +58,7 @@ void NetworkService::evaluateState(){
         if (getTimeInCurrentState() > CONNECTION_TIMEOUT) {
             newState = NetworkState::RECONNECTING;
             updateMetrics(false);
-        } else if (wifi.isConnected) {
+        } else if (wifi.isConnected()) {
             newState = NetworkState::CONNECTED;
             updateMetrics(true);
         }
@@ -76,14 +76,17 @@ void NetworkService::evaluateState(){
                 reconnectionAttempts++;
                 stateStart = millis();
             }
-            } else if (WiFi.status() == WL_CONNECTED) {
+            } else if (wifi.isConnected()) {
                 newState = NetworkState::CONNECTED;
                 updateMetrics(true);
-                resetReconnectionAttempts();
+                reconnectionAttempts = 0;
             }
         break;
     case NetworkState::AP_MODE:
-        accessPoint.begin("Room_Stat_Access", "");
+        if (state != NetworkState::AP_MODE){
+            startAP();
+        }
+        
         break;
     case NetworkState::ERROR:
         break;
@@ -114,8 +117,4 @@ void NetworkService::updateMetrics(bool connectionSuccess){
         successfulConnections++;
         lastSuccessfulConnection = millis();
     }
-}
-
-void NetworkService::resetReconnectionAttempts() {
-    reconnectionAttempts = 0;
 }
