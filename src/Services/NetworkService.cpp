@@ -40,11 +40,11 @@ void NetworkService::startAP(){
 }
 
 void NetworkService::forceReconnection(){
-
+    //
 }
 
 void NetworkService::reset(){
-
+    //
 }
 
 void NetworkService::evaluateState(){
@@ -103,6 +103,10 @@ void NetworkService::transitionTo(NetworkState newState){
 
 unsigned long NetworkService::getTimeInCurrentState() const {
     return millis() - stateStart;
+}
+
+NetworkState NetworkService::getCurrentState() const {
+    return state;
 }
 
 void NetworkService::updateMetrics(bool connectionSuccess){

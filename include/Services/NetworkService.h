@@ -38,7 +38,7 @@ public:
     void reset();
 
     unsigned long getTimeInCurrentState() const;
-
+    NetworkState getCurrentState() const;
 };
 
 
