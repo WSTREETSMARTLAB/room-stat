@@ -19,8 +19,16 @@ private:
     const unsigned long RECONNECT_TIMEOUT = 30000;
     const int MAX_RECONNECTION_ATTEMPTS = 3;
 
+    int reconnectionAttempts;
+    int totalConnectionAttempts;
+    int successfulConnections;
+    unsigned long lastSuccessfulConnection;
+
     void evaluateState();
     void transitionTo(NetworkState newState);
+    void updateMetrics(bool connectionSuccess);
+
+    void resetReconnectionAttempts();
 public:
     NetworkService(WiFiPointManager& wifi, AccessPointManager& accessPoint);
     void update();
@@ -28,6 +36,9 @@ public:
     void startAP();
     void forceReconnection();
     void reset();
+
+    unsigned long getTimeInCurrentState() const;
+
 };
 
 
