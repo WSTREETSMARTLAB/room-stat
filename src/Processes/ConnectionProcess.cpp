@@ -1,23 +1,21 @@
 #include <Processes/ConnectionProcess.h>
 #include <Storage/ToolPreferences.h>
 
-ConnectionProcess::ConnectionProcess(AccessPointManager& accessPointManager, WiFiPointManager& wifiPointManager, ToolPreferences& preferences): 
-ssid("Room_Stat_Access"), 
-pass(""), 
-accessPointManager(accessPointManager), 
-wifiPointManager(wifiPointManager),
-preferences(preferences)
-{
-}
+ConnectionProcess::ConnectionProcess(NetworkService& network, ToolPreferences& preferences): 
+network(network),
+preferences(preferences){}
 
 void ConnectionProcess::handle(){
-    ToolConfig config;
-    config = preferences.load();
+    network.update();
+    ToolConfig config = preferences.load();
 
-    bool success = wifiPointManager.connect(config.wifi_ssid, config.wifi_pass);
-
-    if (!success) {
-        accessPointManager.begin(ssid, pass);
+    if (network.getCurrentState() == NetworkState::CONNECTED || network.getCurrentState() == NetworkState::AP_MODE){
         return;
+    }
+
+    if (config.wifi_ssid.length() > 0) {
+        network.attemptConnection(config.wifi_ssid, config.wifi_pass);
+    } else {
+        network.startAP();
     }
 }

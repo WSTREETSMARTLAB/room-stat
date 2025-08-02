@@ -1,18 +1,14 @@
 #pragma once
-#include <Network/AccessPointManager.h>
-#include <Network/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
 #include <Storage/ToolPreferences.h>
+#include <Services/NetworkService.h>
 
 class ConnectionProcess
 {
 private:
-    AccessPointManager& accessPointManager;
-    WiFiPointManager& wifiPointManager;
+    NetworkService& network;
     ToolPreferences& preferences;
-    const String ssid;
-    const String pass;
 public:
-    ConnectionProcess(AccessPointManager& accessPointManager, WiFiPointManager& wiFiPointManager, ToolPreferences& preferences);
+    ConnectionProcess(NetworkService& network, ToolPreferences& preferences);
     void handle();
 };
