@@ -1,4 +1,8 @@
 #include <Services/ButtonService.h>
+#include <Managers/PowerManager.h>
+#include <Storage/ToolPreferences.h>
+
+extern PowerManager powerManager;
 
 ButtonService::ButtonService(uint8_t pin): buttonPin(pin) {}
 
@@ -21,7 +25,7 @@ void ButtonService::update(){
             performReset();
         } 
         
-        if (pressDuration >= 100) {
+        if (pressDuration <= 1000) {
             toggleSleepMode();
         }
 
@@ -30,9 +34,14 @@ void ButtonService::update(){
 }
 
 void ButtonService::performReset(){
-    
+    ToolPreferences::reset();
+    ESP.restart();
 }
 
 void ButtonService::toggleSleepMode(){
-
+    if (powerManager.getCurrentState() == ACTIVE) {
+        powerManager.enterSleepMode();
+    } else {
+        powerManager.wakeUp();
+    }
 }

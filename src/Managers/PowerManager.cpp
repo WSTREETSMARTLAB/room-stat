@@ -31,6 +31,15 @@ void PowerManager::wakeUp(){
     sleepModeStartTime = 0;
 }
 
+bool PowerManager::shouldProcessData() {
+    if (currentState == ACTIVE) {
+        return true;
+    } else if (currentState == SLEEP) {
+        return (millis() - sleepModeStartTime) % SLEEP_INTERVAL < 2000;
+    }
+    return false;
+}
+
 DeviceState PowerManager::getCurrentState() {
     return currentState;
 }
