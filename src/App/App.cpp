@@ -2,8 +2,8 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
-#include <Network/AccessPointManager.h>
-#include <Network/WiFiPointManager.h>
+#include <Managers/AccessPointManager.h>
+#include <Managers/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
 #include <Services/ApiService.h>
 #include <Services/DHTService.h>

@@ -1,6 +1,6 @@
 #include <Processes/AuthProcess.h>
 #include <ArduinoJson.h>
-#include <Network/WiFiPointManager.h>
+#include <Managers/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
 #include <App/State.h>
 

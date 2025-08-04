@@ -1,8 +1,8 @@
 #pragma once
 #include <WiFi.h>
 #include <Enum/NetworkState.h>
-#include <Network/WiFiPointManager.h>
-#include <Network/AccessPointManager.h>
+#include <Managers/WiFiPointManager.h>
+#include <Managers/AccessPointManager.h>
 
 class NetworkService
 {

@@ -1,4 +1,4 @@
-#include <Network/WiFiPointManager.h>
+#include <Managers/WiFiPointManager.h>
 #include <WiFi.h>
 
 WiFiPointManager::WiFiPointManager(DisplayService& display)

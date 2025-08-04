@@ -1,5 +1,5 @@
 #include <Services/ApiService.h>
-#include <Network/WiFiPointManager.h>
+#include <Managers/WiFiPointManager.h>
 #include <App/State.h>
 
 bool ApiService::get(const String& endpoint, String& response)
