@@ -8,6 +8,7 @@
 #include <Services/ApiService.h>
 #include <Services/DHTService.h>
 #include <Services/LDRService.h>
+#include <Services/ButtonService.h>
 #include <Services/DisplayService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
@@ -22,6 +23,7 @@ DHTService dht;
 LDRService ldr;
 ApiService api;
 DisplayService display;
+ButtonService button;
 AccessPointManager accessPointManager(server, display);
 WiFiPointManager wifiPointManager(display);
 ToolPreferences preferences;
@@ -38,6 +40,7 @@ void App::setup(){
     display.begin();
     display.message("Setup", 2000);
 
+    button.begin();
     dht.begin();
     connection.handle();
     healthCheck.handle();

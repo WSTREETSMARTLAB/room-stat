@@ -4,14 +4,14 @@
 
 extern PowerManager powerManager;
 
-ButtonService::ButtonService(uint8_t pin): buttonPin(pin) {}
+ButtonService::ButtonService(){}
 
 void ButtonService::begin(){
-    pinMode(buttonPin, INPUT_PULLUP);
+    pinMode(BUTTON_PIN, INPUT_PULLUP);
 }
 
 void ButtonService::update(){
-    bool currentState = digitalRead(buttonPin) == LOW;
+    bool currentState = digitalRead(BUTTON_PIN) == LOW;
 
     if (currentState && !isPressed) {
         isPressed = true;
