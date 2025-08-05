@@ -1,6 +1,7 @@
 #include <Services/ResetButtonService.h>
 #include <Managers/PowerManager.h>
 #include <Storage/ToolPreferences.h>
+#include <Enum/Pin.h>
 
 ResetButtonService::ResetButtonService(PowerManager& power){}
 

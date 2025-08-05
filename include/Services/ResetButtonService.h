@@ -1,7 +1,6 @@
 #pragma once
 #include <Arduino.h>
 #include <Managers/PowerManager.h>
-#include <Enum/Pin.h>
 
 class ResetButtonService
 {
