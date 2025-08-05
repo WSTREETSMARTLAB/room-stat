@@ -62,7 +62,7 @@ void App::loop(){
         vizualization.handle(data);
     }
 
-    if (currentTime - lastDataTransmit >= DATA_TRANSMIT_INTERVAL){
+    if (currentTime - lastDataTransmit >= DATA_TRANSMIT_INTERVAL && wifiPoint.isConnected()){
         transmit.handle(data);
     }
 }

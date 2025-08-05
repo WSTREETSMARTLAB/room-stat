@@ -9,6 +9,7 @@ private:
 public:
     WiFiPointManager();
     void connect(const String ssid, const String password);
+    void disconnect();
     static bool isConnected();
     IPAddress getIP() const;
 };

@@ -30,14 +30,22 @@ void NetworkService::attemptConnection(const String& ssid, const String& passwor
         return;
     }
 
-    state = NetworkState::CONNECTING;
     display.message("Connecting to Wi-Fi", 1000);
     wifi.connect(ssid, password);
+    state = NetworkState::CONNECTING;
 
     if (wifi.isConnected){
         state = NetworkState::CONNECTED;
         display.message("Connected", 1000);
+        totalConnectionAttempts = 0;
+        return;
+    } else {
+        display.message("Connection error", 1000);
+        state = NetworkState::ERROR;
+        wifi.disconnect();
     }
+
+    totalConnectionAttempts++;
 }
 
 void NetworkService::startAP(){
@@ -48,14 +56,6 @@ void NetworkService::startAP(){
     accessPoint.begin("Room_Stat_Access", "");
     state = NetworkState::AP_MODE;
     display.message("Access Point Started", 2000);
-}
-
-void NetworkService::forceReconnection(){
-    //
-}
-
-void NetworkService::reset(){
-    //
 }
 
 void NetworkService::evaluateState(){
@@ -124,4 +124,12 @@ void NetworkService::updateMetrics(bool connectionSuccess){
         successfulConnections++;
         lastSuccessfulConnection = millis();
     }
+}
+
+int NetworkService::getMaxReconnectionAttempts() const {
+    return MAX_RECONNECTION_ATTEMPTS;
+}
+
+int NetworkService::getTotalConnectionAttempts() const {
+    return totalConnectionAttempts;
 }
