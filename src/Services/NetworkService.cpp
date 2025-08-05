@@ -37,7 +37,7 @@ void NetworkService::attemptConnection(const String& ssid, const String& passwor
     if (wifi.isConnected){
         state = NetworkState::CONNECTED;
         display.message("Connected", 1000);
-        totalConnectionAttempts = 0;
+        reconnectionAttempts = 0;
         return;
     } else {
         display.message("Connection error", 1000);
@@ -45,7 +45,7 @@ void NetworkService::attemptConnection(const String& ssid, const String& passwor
         wifi.disconnect();
     }
 
-    totalConnectionAttempts++;
+    reconnectionAttempts++;
 }
 
 void NetworkService::startAP(){
@@ -63,7 +63,7 @@ void NetworkService::evaluateState(){
 
     switch (state)
     {
-    case NetworkState::DISCONNECTED:   
+    case NetworkState::DISCONNECTED:
         break;
     case NetworkState::CONNECTING:
         if (getTimeInCurrentState() > CONNECTION_TIMEOUT) {
@@ -96,6 +96,9 @@ void NetworkService::evaluateState(){
     case NetworkState::AP_MODE:        
         break;
     case NetworkState::ERROR:
+            if (reconnectionAttempts <= MAX_RECONNECTION_ATTEMPTS) {
+                newState = NetworkState::RECONNECTING;
+            }
         break;
     default:
         break;
@@ -130,6 +133,6 @@ int NetworkService::getMaxReconnectionAttempts() const {
     return MAX_RECONNECTION_ATTEMPTS;
 }
 
-int NetworkService::getTotalConnectionAttempts() const {
+int NetworkService::getReconnectionAttempts() const {
     return totalConnectionAttempts;
 }

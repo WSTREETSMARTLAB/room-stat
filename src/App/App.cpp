@@ -47,6 +47,9 @@ void App::setup(){
     healthCheck.handle();
     auth.handle();
 
+    lastDataUpdate = millis();
+    lastDataTransmit = millis();
+
     display.message("Ready!", 2000);
 }
 
@@ -60,9 +63,11 @@ void App::loop(){
     if (currentTime - lastDataUpdate >= DATA_UPDATE_INTERVAL){
         data = dataCollecting.handle();
         vizualization.handle(data);
+        lastDataUpdate = currentTime; 
     }
 
-    if (currentTime - lastDataTransmit >= DATA_TRANSMIT_INTERVAL && wifiPoint.isConnected()){
+    if (currentTime - lastDataTransmit >= DATA_TRANSMIT_INTERVAL && network.getCurrentState() == NetworkState::CONNECTED){
         transmit.handle(data);
+        lastDataTransmit = currentTime;
     }
 }

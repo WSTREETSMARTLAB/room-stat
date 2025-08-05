@@ -14,13 +14,7 @@ void ConnectionProcess::handle(){
     }
 
     if (config.wifi_ssid.length() > 0) {
-        if (network.getMaxReconnectionAttempts() <= network.getTotalConnectionAttempts()){
-            network.startAP();
-        }
-        
-        while (network.getMaxReconnectionAttempts() > network.getTotalConnectionAttempts()){
-            network.attemptConnection(config.wifi_ssid, config.wifi_pass);
-        }
+        network.attemptConnection(config.wifi_ssid, config.wifi_pass);
     } else {
         network.startAP();
     }

@@ -20,6 +20,4 @@ void TransmitDataProcess::handle(DataConfig& data){
     doc["light"] = data.light;
     serializeJson(doc, payload);
     api.post("/room-stat/api/v1/transmit", payload, response);
-
-    Serial.println(response);
 }

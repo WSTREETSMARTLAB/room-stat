@@ -39,7 +39,7 @@ public:
     unsigned long getTimeInCurrentState() const;
     NetworkState getCurrentState() const;
     int getMaxReconnectionAttempts() const;
-    int getTotalConnectionAttempts() const;
+    int getReconnectionAttempts() const;
 };
 
 

@@ -7,7 +7,6 @@ DataCollectingProcess::DataCollectingProcess(DHTService& dht, LDRService& ldr)
 
 DataConfig DataCollectingProcess::handle(){
     DataConfig data;
-
     static float* dhtSensorData;
     dhtSensorData = dht.read();
 
