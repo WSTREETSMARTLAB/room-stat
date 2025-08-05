@@ -1,5 +1,5 @@
 #include <Processes/VizualizationDataProcess.h>
-#include <Network/WiFiPointManager.h>
+#include <Managers/WiFiPointManager.h>
 
 VizualizationDataProcess::VizualizationDataProcess(DisplayService& display)
 : display(display) 

@@ -28,3 +28,11 @@ ToolConfig ToolPreferences::load() {
 
     return config;
 }
+
+void ToolPreferences::reset() {
+    Preferences preferences;
+
+    preferences.begin("setup", false);
+    preferences.clear();
+    preferences.end();
+}

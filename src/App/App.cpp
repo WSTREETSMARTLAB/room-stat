@@ -2,12 +2,13 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
-#include <Network/AccessPointManager.h>
-#include <Network/WiFiPointManager.h>
+#include <Managers/AccessPointManager.h>
+#include <Managers/WiFiPointManager.h>
 #include <DTO/ToolConfig.h>
 #include <Services/ApiService.h>
 #include <Services/DHTService.h>
 #include <Services/LDRService.h>
+#include <Services/ButtonService.h>
 #include <Services/DisplayService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
@@ -22,6 +23,7 @@ DHTService dht;
 LDRService ldr;
 ApiService api;
 DisplayService display;
+ButtonService button;
 AccessPointManager accessPointManager(server, display);
 WiFiPointManager wifiPointManager(display);
 ToolPreferences preferences;
@@ -38,6 +40,7 @@ void App::setup(){
     display.begin();
     display.message("Setup", 2000);
 
+    button.begin();
     dht.begin();
     connection.handle();
     healthCheck.handle();

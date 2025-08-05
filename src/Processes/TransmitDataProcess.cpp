@@ -1,5 +1,5 @@
 #include <Processes/TransmitDataProcess.h>
-#include <Network/WiFiPointManager.h>
+#include <Managers/WiFiPointManager.h>
 #include <App/State.h>
 #include <ArduinoJson.h>
 
