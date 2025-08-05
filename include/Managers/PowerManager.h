@@ -1,6 +1,7 @@
 #pragma once
 #include <Arduino.h>
 #include <Enum/DeviceState.h>
+#include <Enum/Pin.h>
 #include <esp_sleep.h>
 #include <esp_pm.h>
 
@@ -23,5 +24,5 @@ public:
     bool isActive();
     bool isSleep();
 
-    void setupWakeUpSource(uint8_t pin);
+    void setupWakeUpSource();
 };

@@ -2,6 +2,5 @@
 
 enum DeviceState {
     ACTIVE,
-    SLEEP,
-    ERROR
+    SLEEP
 };

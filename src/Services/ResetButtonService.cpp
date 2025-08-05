@@ -1,18 +1,16 @@
-#include <Services/ButtonService.h>
+#include <Services/ResetButtonService.h>
 #include <Managers/PowerManager.h>
 #include <Storage/ToolPreferences.h>
 
-extern PowerManager powerManager;
+ResetButtonService::ResetButtonService(PowerManager& power){}
 
-ButtonService::ButtonService(PowerManager& power){}
-
-void ButtonService::begin(){
-    pinMode(BUTTON_PIN, INPUT_PULLUP);
-    power.setupWakeUpSource(BUTTON_PIN);
+void ResetButtonService::begin(){
+    pinMode(Pin::RESET_BUTTON, INPUT_PULLUP);
+    power.setupWakeUpSource();
 }
 
-void ButtonService::update(){
-    bool currentState = digitalRead(BUTTON_PIN) == LOW;
+void ResetButtonService::update(){
+    bool currentState = digitalRead(Pin::RESET_BUTTON) == LOW;
 
     if (currentState && !isPressed) {
         isPressed = true;
@@ -34,15 +32,16 @@ void ButtonService::update(){
     }
 }
 
-void ButtonService::performReset(){
+void ResetButtonService::performReset(){
     ToolPreferences::reset();
     ESP.restart();
 }
 
-void ButtonService::toggleSleepMode(){
-    if (powerManager.getCurrentState() == ACTIVE) {
-        powerManager.enterSleepMode();
+void ResetButtonService::toggleSleepMode(){
+    if (power.getCurrentState() == ACTIVE) {
+        power.enterSleepMode();
+
     } else {
-        powerManager.wakeUp();
+        power.wakeUp();
     }
 }

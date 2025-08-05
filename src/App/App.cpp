@@ -9,7 +9,7 @@
 #include <Services/ApiService.h>
 #include <Services/DHTService.h>
 #include <Services/LDRService.h>
-#include <Services/ButtonService.h>
+#include <Services/ResetButtonService.h>
 #include <Services/DisplayService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
@@ -30,7 +30,7 @@ PowerManager power;
 ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
 NetworkService network(wifiPointManager, accessPointManager);
-ButtonService button(power);
+ResetButtonService resetBtn(power);
 ConnectionProcess connection(network, preferences);
 AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);
@@ -42,7 +42,7 @@ void App::setup(){
     display.begin();
     display.message("Setup", 2000);
 
-    button.begin();
+    resetBtn.begin();
     dht.begin();
     connection.handle();
     healthCheck.handle();
