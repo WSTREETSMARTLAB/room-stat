@@ -3,6 +3,7 @@
 #include <Enum/NetworkState.h>
 #include <Managers/WiFiPointManager.h>
 #include <Managers/AccessPointManager.h>
+#include <Managers/DisplayManager.h>
 
 class NetworkService
 {
@@ -10,6 +11,8 @@ private:
     NetworkState state;
     WiFiPointManager& wifi;
     AccessPointManager& accessPoint;
+    DisplayManager& display;
+    
     unsigned long stateStart;
     unsigned long lastCheck;
 
@@ -28,7 +31,7 @@ private:
     void transitionTo(NetworkState newState);
     void updateMetrics(bool connectionSuccess);
 public:
-    NetworkService(WiFiPointManager& wifi, AccessPointManager& accessPoint);
+    NetworkService(WiFiPointManager& wifi, AccessPointManager& accessPoint, DisplayManager& display);
     void update();
     void attemptConnection(const String& ssid, const String& password);
     void startAP();

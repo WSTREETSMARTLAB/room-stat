@@ -89,7 +89,7 @@ void DisplayManager::message(const String message, uint16_t delayMs){
     delay(delayMs);
 }
 
-void DisplayManager::loader(bool (*condition)(), const String message){
+void DisplayManager::loader(std::function<bool()> condition, const String message){
     uint8_t dotCount = 0;
     while (!condition()){
         display.clearDisplay();

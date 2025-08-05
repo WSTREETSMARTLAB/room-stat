@@ -2,13 +2,15 @@
 
 NetworkService::NetworkService(
     WiFiPointManager& wifi,
-    AccessPointManager& accessPoint
+    AccessPointManager& accessPoint,
+    DisplayManager& display
 )
     : state(NetworkState::DISCONNECTED)
     , stateStart(millis())
     , lastCheck(0)
     , wifi(wifi)
     , accessPoint(accessPoint)
+    , display(display)
     , reconnectionAttempts(0)
     , totalConnectionAttempts(0)
     , successfulConnections(0)
@@ -29,6 +31,7 @@ void NetworkService::attemptConnection(const String& ssid, const String& passwor
     }
 
     state = NetworkState::CONNECTING;
+    display.loader([this]() { return wifi.isConnected(); }, "Connecting to WiFi...");
     wifi.connect(ssid, password);
 
     if (wifi.isConnected){

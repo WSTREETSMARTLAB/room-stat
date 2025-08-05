@@ -17,6 +17,6 @@ public:
 
     void logo(uint16_t delayMs);
     void message(const String message, uint16_t delayMs);
-    void loader(bool (*condition)(), const String message);
+    void loader(std::function<bool()> condition, const String message);
     void parameterScreen(String content, bool wifiStatus);
 };
