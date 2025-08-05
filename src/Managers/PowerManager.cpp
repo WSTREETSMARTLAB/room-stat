@@ -23,17 +23,26 @@ void PowerManager::transitionToSleep() {
 
 void PowerManager::enterSleepMode() {
     currentState = DeviceState::SLEEP;
+    sleepModeStartTime = millis();
+
+    pinMode(IoNumber::PIN_DHT22, INPUT);
+    pinMode(IoNumber::PIN_LDR, INPUT);
+
     setCpuFrequencyMhz(80);
     esp_light_sleep_start();
-
-    // Отключить неиспользуемые GPIO
-    // pinMode(unusedPin, INPUT); // Высокий импеданс
-    sleepModeStartTime = millis();
 }
 
 void PowerManager::wakeUp(){
     currentState = DeviceState::ACTIVE;
     lastActivityTime = millis();
+
+    pinMode(IoNumber::PIN_DHT22, INPUT_PULLUP);
+    pinMode(IoNumber::PIN_LDR, INPUT_PULLUP);
+
+    setCpuFrequencyMhz(240);
+
+    delay(50);
+
     sleepModeStartTime = 0;
 }
 

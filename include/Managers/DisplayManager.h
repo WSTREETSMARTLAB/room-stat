@@ -4,12 +4,12 @@
 #include <Adafruit_SSD1306.h>
 #include <DTO/DataConfig.h>
 
-class DisplayService
+class DisplayManager
 {
 private:
     Adafruit_SSD1306 display;
 public:
-    DisplayService();
+    DisplayManager();
     bool begin();
     void clear();
     void turnOff();

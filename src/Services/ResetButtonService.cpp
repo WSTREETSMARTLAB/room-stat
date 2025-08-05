@@ -41,7 +41,7 @@ void ResetButtonService::performReset(){
 void ResetButtonService::toggleSleepMode(){
     if (power.getCurrentState() == ACTIVE) {
         power.enterSleepMode();
-
+        // switch off wi-fi
     } else {
         power.wakeUp();
     }

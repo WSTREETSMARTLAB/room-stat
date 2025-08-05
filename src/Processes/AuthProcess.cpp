@@ -4,7 +4,7 @@
 #include <DTO/ToolConfig.h>
 #include <App/State.h>
 
-AuthProcess::AuthProcess(ApiService& apiServices, ToolPreferences& preferences, DisplayService& display)
+AuthProcess::AuthProcess(ApiService& apiServices, ToolPreferences& preferences, DisplayManager& display)
     : apiService(apiService), preferences(preferences), display(display)
 {}
 

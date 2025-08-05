@@ -2,6 +2,7 @@
 #include <WiFi.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
+#include <Managers/DisplayManager.h>
 #include <Managers/AccessPointManager.h>
 #include <Managers/WiFiPointManager.h>
 #include <Managers/PowerManager.h>
@@ -10,7 +11,6 @@
 #include <Services/DHTService.h>
 #include <Services/LDRService.h>
 #include <Services/ResetButtonService.h>
-#include <Services/DisplayService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
 #include <Processes/DataCollectingProcess.h>
@@ -23,9 +23,9 @@ WebServer server(80);
 DHTService dht;
 LDRService ldr;
 ApiService api;
-DisplayService display;
-AccessPointManager accessPointManager(server, display);
-WiFiPointManager wifiPointManager(display);
+DisplayManager display;
+AccessPointManager accessPointManager(server);
+WiFiPointManager wifiPointManager;
 PowerManager power;
 ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
