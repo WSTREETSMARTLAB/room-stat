@@ -51,3 +51,8 @@ bool PowerManager::isActive() {
 bool PowerManager::isSleep() {
     return currentState == SLEEP;
 }
+
+void PowerManager::setupWakeUpSource(uint8_t pin){
+    esp_sleep_enable_ext0_wakeup((gpio_num_t)pin, 0);
+    esp_sleep_enable_timer_wakeup(SLEEP_INTERVAL * 1000);
+}

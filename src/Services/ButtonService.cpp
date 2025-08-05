@@ -4,10 +4,11 @@
 
 extern PowerManager powerManager;
 
-ButtonService::ButtonService(){}
+ButtonService::ButtonService(PowerManager& power){}
 
 void ButtonService::begin(){
     pinMode(BUTTON_PIN, INPUT_PULLUP);
+    power.setupWakeUpSource(BUTTON_PIN);
 }
 
 void ButtonService::update(){

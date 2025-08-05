@@ -4,6 +4,7 @@
 #include <Storage/ToolPreferences.h>
 #include <Managers/AccessPointManager.h>
 #include <Managers/WiFiPointManager.h>
+#include <Managers/PowerManager.h>
 #include <DTO/ToolConfig.h>
 #include <Services/ApiService.h>
 #include <Services/DHTService.h>
@@ -23,12 +24,13 @@ DHTService dht;
 LDRService ldr;
 ApiService api;
 DisplayService display;
-ButtonService button;
 AccessPointManager accessPointManager(server, display);
 WiFiPointManager wifiPointManager(display);
+PowerManager power;
 ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
 NetworkService network(wifiPointManager, accessPointManager);
+ButtonService button(power);
 ConnectionProcess connection(network, preferences);
 AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);

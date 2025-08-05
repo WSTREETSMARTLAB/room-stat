@@ -1,6 +1,8 @@
 #pragma once
 #include <Arduino.h>
 #include <Enum/DeviceState.h>
+#include <esp_sleep.h>
+#include <esp_pm.h>
 
 class PowerManager
 {
@@ -20,4 +22,6 @@ public:
     DeviceState getCurrentState();
     bool isActive();
     bool isSleep();
+
+    void setupWakeUpSource(uint8_t pin);
 };
