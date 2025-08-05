@@ -3,7 +3,10 @@
 #include <Storage/ToolPreferences.h>
 #include <Enum/IoNumber.h>
 
-ResetButtonService::ResetButtonService(PowerManager& power){}
+ResetButtonService::ResetButtonService(PowerManager& power, DisplayManager& display): 
+power(power),
+display(display)
+{}
 
 void ResetButtonService::begin(){
     pinMode(IoNumber::PIN_RESET_BUTTON, INPUT_PULLUP);
@@ -22,7 +25,8 @@ void ResetButtonService::update(){
         unsigned long pressDuration = millis() - pressStartTime;
 
         if (pressDuration >= 3000) {
-            performReset();
+            display.message("reset", 3000);
+            // performReset();
         } 
         
         if (pressDuration <= 1000) {
@@ -40,9 +44,12 @@ void ResetButtonService::performReset(){
 
 void ResetButtonService::toggleSleepMode(){
     if (power.getCurrentState() == ACTIVE) {
-        power.enterSleepMode();
+        display.message("SLEEP", 3000);
         // switch off wi-fi
+        // power.enterSleepMode();
     } else {
-        power.wakeUp();
+        display.message("WAKE UP", 3000);
+        // power.wakeUp();
+        // connect to wi-fi
     }
 }

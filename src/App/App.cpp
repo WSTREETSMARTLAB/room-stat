@@ -30,7 +30,7 @@ PowerManager power;
 ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
 NetworkService network(wifiPoint, accessPoint, display);
-ResetButtonService resetBtn(power);
+ResetButtonService resetBtn(power, display);
 ConnectionProcess connection(network, preferences);
 AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);
