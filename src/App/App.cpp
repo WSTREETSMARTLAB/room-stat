@@ -1,5 +1,4 @@
 #include <App/App.h>
-#include <WiFi.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
 #include <Managers/DisplayManager.h>
@@ -40,7 +39,7 @@ DataConfig data;
 
 void App::setup(){
     display.begin();
-    display.message("Setup", 2000);
+    display.message("Setup", 1000);
 
     resetBtn.begin();
     dht.begin();
@@ -48,14 +47,22 @@ void App::setup(){
     healthCheck.handle();
     auth.handle();
 
-    display.message("Ready!", 3000);
+    display.message("Ready!", 2000);
 }
 
 void App::loop(){
-    server.handleClient();
+    unsigned long currentTime = millis();
 
-    data = dataCollecting.handle();
+    resetBtn.update();
+    server.handleClient();
     connection.handle();
-    transmit.handle(data);
-    vizualization.handle(data);
+
+    if (currentTime - lastDataUpdate >= DATA_UPDATE_INTERVAL){
+        data = dataCollecting.handle();
+        vizualization.handle(data);
+    }
+
+    if (currentTime - lastDataTransmit >= DATA_TRANSMIT_INTERVAL){
+        transmit.handle(data);
+    }
 }

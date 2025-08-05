@@ -5,12 +5,12 @@ App app;
 
 void setup() {
   Serial.begin(115200);
-  delay(2000);
+  delay(1000);
   
   app.setup();
 }
 
 void loop() {
   app.loop();
-  delay(2000);
+  delay(50);
 }

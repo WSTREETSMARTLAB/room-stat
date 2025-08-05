@@ -31,11 +31,12 @@ void NetworkService::attemptConnection(const String& ssid, const String& passwor
     }
 
     state = NetworkState::CONNECTING;
-    display.loader([this]() { return wifi.isConnected(); }, "Connecting to WiFi...");
+    display.message("Connecting to Wi-Fi", 1000);
     wifi.connect(ssid, password);
 
     if (wifi.isConnected){
         state = NetworkState::CONNECTED;
+        display.message("Connected", 1000);
     }
 }
 
@@ -46,7 +47,7 @@ void NetworkService::startAP(){
     
     accessPoint.begin("Room_Stat_Access", "");
     state = NetworkState::AP_MODE;
-
+    display.message("Access Point Started", 2000);
 }
 
 void NetworkService::forceReconnection(){
