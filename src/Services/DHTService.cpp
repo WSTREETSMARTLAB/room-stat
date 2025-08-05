@@ -1,10 +1,10 @@
 #include <Services/DHTService.h>
 #include <Enum/DataIndexes.h>
-#include <Enum/Pin.h>
+#include <Enum/IoNumber.h>
 
 #define DHT_TYPE DHT22
 
-DHTService::DHTService(): dht(Pin::DHT22, DHT_TYPE)
+DHTService::DHTService(): dht(IoNumber::PIN_DHT22, DHT_TYPE)
 {}
 
 void DHTService::begin(){

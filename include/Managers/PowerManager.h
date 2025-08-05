@@ -1,7 +1,6 @@
 #pragma once
 #include <Arduino.h>
 #include <Enum/DeviceState.h>
-#include <Enum/Pin.h>
 #include <esp_sleep.h>
 #include <esp_pm.h>
 
