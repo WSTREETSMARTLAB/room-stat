@@ -8,7 +8,7 @@ class ResetButtonService
 private:
     PowerManager& power;
     DisplayManager& display;
-    unsigned long pressStartTime = 0;
+    unsigned long pressStartTime;
     bool isPressed = false;
 
     void performReset();
@@ -16,6 +16,6 @@ private:
 public:
     ResetButtonService(PowerManager& power, DisplayManager& display);
     void begin();
-    void update();
+    void update(unsigned long currentTime);
 };
 

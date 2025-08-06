@@ -55,7 +55,7 @@ void App::setup(){
 void App::loop(){
     unsigned long currentTime = millis();
 
-    resetBtn.update();
+    resetBtn.update(currentTime);
     server.handleClient();
     connection.handle();
 

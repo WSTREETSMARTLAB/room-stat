@@ -13,16 +13,16 @@ void ResetButtonService::begin(){
     power.setupWakeUpSource();
 }
 
-void ResetButtonService::update(){
+void ResetButtonService::update(unsigned long currentTime){
     bool currentState = digitalRead(IoNumber::PIN_RESET_BUTTON) == LOW;
 
     if (currentState && !isPressed) {
         isPressed = true;
-        pressStartTime = millis();
+        pressStartTime = currentTime;
     } 
     
     if (!currentState && isPressed) {
-        unsigned long pressDuration = millis() - pressStartTime;
+        unsigned long pressDuration = currentTime - pressStartTime;
 
         if (pressDuration >= 3000) {
             display.message("reset", 3000);
