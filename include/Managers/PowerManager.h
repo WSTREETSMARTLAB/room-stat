@@ -10,6 +10,11 @@ private:
     DeviceState currentState;
     unsigned long lastActivityTime;
     unsigned long sleepModeStartTime;
+    unsigned long lastDataUpdate;
+    unsigned long lastDataTransmit;
+
+    const unsigned long ACTIVE_INTERVAL = 3000;
+
     const unsigned long SLEEP_TIMEOUT = 30000;
     const unsigned long SLEEP_INTERVAL = 180000;
 public:
@@ -18,7 +23,9 @@ public:
     void transitionToSleep();
     void enterSleepMode();
     void wakeUp();
-    bool shouldProcessData();
+    bool shouldUpdateData();
+    bool shouldTransmitData();
+    bool shouldDisplayData();
     DeviceState getCurrentState();
     bool isActive();
     bool isSleep();

@@ -44,11 +44,11 @@ void ResetButtonService::performReset(){
 
 void ResetButtonService::toggleSleepMode(){
     if (power.getCurrentState() == ACTIVE) {
-        display.message("SLEEP", 3000);
+        display.turnOff();
         // switch off wi-fi
         power.enterSleepMode();
     } else {
-        display.message("WAKE UP", 3000);
+        display.turnOn();
         power.wakeUp();
         // connect to wi-fi
     }

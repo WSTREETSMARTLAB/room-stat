@@ -46,13 +46,37 @@ void PowerManager::wakeUp(){
     sleepModeStartTime = 0;
 }
 
-bool PowerManager::shouldProcessData() {
+bool PowerManager::shouldUpdateData() {
+    unsigned long currentTime = millis();
+
     if (currentState == ACTIVE) {
-        return true;
-    } else if (currentState == SLEEP) {
-        return (millis() - sleepModeStartTime) % SLEEP_INTERVAL < 2000;
+        return (currentTime - lastDataUpdate >= ACTIVE_INTERVAL);
     }
-    return false;
+
+    if (currentState == SLEEP){
+        return (currentTime - lastDataUpdate >= SLEEP_INTERVAL);
+    }
+}
+
+bool PowerManager::shouldTransmitData() {
+    unsigned long currentTime = millis();
+
+    if (currentState == ACTIVE){
+        return true;
+    }
+    
+    if (currentState == SLEEP){
+        return shouldUpdateData();
+    }
+}
+
+bool PowerManager::shouldDisplayData() {
+    if (currentState != ACTIVE){
+        return false;
+    }
+
+    unsigned long currentTime = millis();
+    return (currentTime - lastDataUpdate) >= ACTIVE_INTERVAL;
 }
 
 DeviceState PowerManager::getCurrentState() {

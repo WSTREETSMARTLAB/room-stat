@@ -47,9 +47,6 @@ void App::setup(){
     healthCheck.handle();
     auth.handle();
 
-    lastDataUpdate = millis();
-    lastDataTransmit = millis();
-
     display.message("Ready!", 2000);
 }
 
@@ -60,14 +57,15 @@ void App::loop(){
     server.handleClient();
     connection.handle();
 
-    if (currentTime - lastDataUpdate >= DATA_UPDATE_INTERVAL){
+    if (power.shouldUpdateData()){
         data = dataCollecting.handle();
-        vizualization.handle(data);
-        lastDataUpdate = currentTime; 
     }
 
-    if (currentTime - lastDataTransmit >= DATA_TRANSMIT_INTERVAL && network.getCurrentState() == NetworkState::CONNECTED){
+    if (power.shouldDisplayData()){
+        vizualization.handle(data);
+    }
+    
+    if (power.shouldTransmitData() && network.getCurrentState() == NetworkState::CONNECTED){
         transmit.handle(data);
-        lastDataTransmit = currentTime;
     }
 }
