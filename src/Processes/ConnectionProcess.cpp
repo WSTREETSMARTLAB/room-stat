@@ -6,7 +6,6 @@ network(network),
 preferences(preferences){}
 
 void ConnectionProcess::handle(){
-    network.update();
     ToolConfig config = preferences.load();
 
     if (network.getCurrentState() == NetworkState::CONNECTED || network.getCurrentState() == NetworkState::AP_MODE){

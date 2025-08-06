@@ -56,8 +56,8 @@ void App::loop(){
     unsigned long currentTime = millis();
 
     resetBtn.update(currentTime);
+    network.update(currentTime);
     server.handleClient();
-    connection.handle();
 
     if (currentTime - lastDataUpdate >= power.getInterval()){
         data = dataCollecting.handle();
@@ -68,6 +68,8 @@ void App::loop(){
 
         if (network.getCurrentState() == NetworkState::CONNECTED){
             transmit.handle(data);
+        } else {
+            connection.handle();
         }
         
         lastDataUpdate = currentTime;

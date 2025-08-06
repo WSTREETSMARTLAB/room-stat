@@ -32,7 +32,7 @@ private:
     void updateMetrics(bool connectionSuccess);
 public:
     NetworkService(WiFiPointManager& wifi, AccessPointManager& accessPoint, DisplayManager& display);
-    void update();
+    void update(unsigned long currentTime);
     void attemptConnection(const String& ssid, const String& password);
     void startAP();
 

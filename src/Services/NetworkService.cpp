@@ -16,9 +16,7 @@ NetworkService::NetworkService(
     , successfulConnections(0)
     , lastSuccessfulConnection(0) {}
 
-void NetworkService::update(){
-    unsigned long currentTime = millis();
-    
+void NetworkService::update(unsigned long currentTime){    
     if (currentTime - lastCheck >= CHECK_INTERVAL) {
         evaluateState();
         lastCheck = currentTime;

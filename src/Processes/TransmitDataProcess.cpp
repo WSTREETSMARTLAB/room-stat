@@ -1,5 +1,4 @@
 #include <Processes/TransmitDataProcess.h>
-#include <Managers/WiFiPointManager.h>
 #include <App/State.h>
 #include <ArduinoJson.h>
 
@@ -8,7 +7,7 @@ TransmitDataProcess::TransmitDataProcess(ApiService& api)
 {}
 
 void TransmitDataProcess::handle(DataConfig& data){
-    if (!WiFiPointManager::isConnected() || !serverAlive){
+    if (!serverAlive){
         return;
     }
 
