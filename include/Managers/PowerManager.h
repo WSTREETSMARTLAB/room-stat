@@ -19,16 +19,12 @@ private:
     const unsigned long SLEEP_INTERVAL = 180000;
 public:
     PowerManager();
-    void updateActivity();
-    void transitionToSleep();
-    void enterSleepMode();
+    void enterSleepMode(unsigned long currentTime);
+    void enterActiveMode(unsigned long currentTime);
     void wakeUp();
-    bool shouldUpdateData();
-    bool shouldTransmitData();
-    bool shouldDisplayData();
+
     DeviceState getCurrentState();
-    bool isActive();
-    bool isSleep();
+    unsigned long getInterval() const;
 
     void setupWakeUpSource();
 };

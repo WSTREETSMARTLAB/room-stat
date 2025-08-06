@@ -46,10 +46,10 @@ void ResetButtonService::toggleSleepMode(){
     if (power.getCurrentState() == ACTIVE) {
         display.turnOff();
         // switch off wi-fi
-        power.enterSleepMode();
+        power.enterSleepMode(pressStartTime);
     } else {
         display.turnOn();
-        power.wakeUp();
+        power.enterActiveMode(pressStartTime);
         // connect to wi-fi
     }
 }

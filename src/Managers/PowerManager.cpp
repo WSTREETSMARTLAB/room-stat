@@ -7,21 +7,7 @@ lastActivityTime(millis()),
 sleepModeStartTime(0)
 {}
 
-void PowerManager::updateActivity(){
-    lastActivityTime = millis();
-    if (currentState == SLEEP) {
-        wakeUp();
-    }
-}
-
-void PowerManager::transitionToSleep() {
-    if (currentState == ACTIVE && 
-        (millis() - lastActivityTime) > SLEEP_TIMEOUT) {
-        enterSleepMode();
-    }
-}
-
-void PowerManager::enterSleepMode() {
+void PowerManager::enterSleepMode(unsigned long currentTime) {
     currentState = DeviceState::SLEEP;
     sleepModeStartTime = millis();
 
@@ -32,63 +18,32 @@ void PowerManager::enterSleepMode() {
     // esp_light_sleep_start();
 }
 
-void PowerManager::wakeUp(){
+void PowerManager::enterActiveMode(unsigned long currentTime) {
     currentState = DeviceState::ACTIVE;
-    lastActivityTime = millis();
+    lastActivityTime = currentTime;
 
+    sleepModeStartTime = 0;
+}
+
+void PowerManager::wakeUp(){
     // pinMode(IoNumber::PIN_DHT22, INPUT_PULLUP);
     // pinMode(IoNumber::PIN_LDR, INPUT_PULLUP);
 
     // setCpuFrequencyMhz(240);
 
-    delay(50);
-
-    sleepModeStartTime = 0;
-}
-
-bool PowerManager::shouldUpdateData() {
-    unsigned long currentTime = millis();
-
-    if (currentState == ACTIVE) {
-        return (currentTime - lastDataUpdate >= ACTIVE_INTERVAL);
-    }
-
-    if (currentState == SLEEP){
-        return (currentTime - lastDataUpdate >= SLEEP_INTERVAL);
-    }
-}
-
-bool PowerManager::shouldTransmitData() {
-    unsigned long currentTime = millis();
-
-    if (currentState == ACTIVE){
-        return true;
-    }
-    
-    if (currentState == SLEEP){
-        return shouldUpdateData();
-    }
-}
-
-bool PowerManager::shouldDisplayData() {
-    if (currentState != ACTIVE){
-        return false;
-    }
-
-    unsigned long currentTime = millis();
-    return (currentTime - lastDataUpdate) >= ACTIVE_INTERVAL;
+    // delay(50);
 }
 
 DeviceState PowerManager::getCurrentState() {
     return currentState;
 }
 
-bool PowerManager::isActive() {
-    return currentState == ACTIVE;
-}
-
-bool PowerManager::isSleep() {
-    return currentState == SLEEP;
+unsigned long PowerManager::getInterval() const {
+    if (currentState == SLEEP){
+        return SLEEP_INTERVAL;
+    }
+    
+    return ACTIVE_INTERVAL;
 }
 
 void PowerManager::setupWakeUpSource(){
