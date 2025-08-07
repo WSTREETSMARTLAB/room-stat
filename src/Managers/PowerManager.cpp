@@ -9,12 +9,18 @@ sleepModeStartTime(0)
 
 void PowerManager::update(unsigned long currentTime) {
     if (currentTime - lastActivityTime >= SLEEP_TIMEOUT){
-        Serial.println("sleep timeout");
         enterSleepMode(currentTime);
+        sleep();
     }
 
     if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
+        wakeUp();
         enterActiveMode(currentTime);
+    }
+
+    if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER){
+        wakeUp();
+        lastActivityTime = currentTime;
     }
 }
 
@@ -28,6 +34,7 @@ void PowerManager::sleep(){
     pinMode(IoNumber::PIN_LDR, INPUT);
 
     setCpuFrequencyMhz(80);
+    esp_sleep_disable_wifi_wakeup();
     esp_light_sleep_start();
 }
 
@@ -42,6 +49,8 @@ void PowerManager::wakeUp(){
     
     pinMode(IoNumber::PIN_DHT22, INPUT_PULLUP);
     pinMode(IoNumber::PIN_LDR, INPUT_PULLUP);
+
+    esp_sleep_enable_wifi_wakeup();
     
     delay(50);
 }

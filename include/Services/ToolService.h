@@ -12,5 +12,4 @@ private:
 public:
     ToolService(PowerManager& power, DisplayManager& display, WiFiPointManager& wifi);
     void updateActivityMode(unsigned long currentTime);
-    void transitionToDataUpdate(unsigned long currentTime);
 };

@@ -62,7 +62,6 @@ void App::loop(){
     server.handleClient();
 
     tool.updateActivityMode(currentTime);
-    tool.transitionToDataUpdate(currentTime);
 
     if (currentTime - lastDataUpdate >= power.getInterval()){
         data = dataCollecting.handle();

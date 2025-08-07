@@ -18,19 +18,10 @@ void ToolService::updateActivityMode(unsigned long currentTime){
     if (power.getCurrentState() == SLEEP){
         display.message("SLEEP", 2000);
         display.turnOff();
-        wifi.disconnect();
-        power.sleep();
     }
 
     if (power.getCurrentState() == ACTIVE){
-        power.wakeUp();
         display.turnOn();
         display.message("WAKE UP", 2000);
-    }
-}
-
-void ToolService::transitionToDataUpdate(unsigned long currentTime){
-    if (power.getCurrentState() == SLEEP && currentTime - power.getSleepModeStartTime() >= power.getInterval()){
-        power.wakeUp();
     }
 }
