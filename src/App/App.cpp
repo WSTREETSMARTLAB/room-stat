@@ -10,6 +10,7 @@
 #include <Services/DHTService.h>
 #include <Services/LDRService.h>
 #include <Services/ResetButtonService.h>
+#include <Services/ToolService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
 #include <Processes/DataCollectingProcess.h>
@@ -30,6 +31,7 @@ ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
 NetworkService network(wifiPoint, accessPoint);
 ResetButtonService resetBtn(power, wifiPoint, display);
+ToolService tool(power, display, wifiPoint);
 ConnectionProcess connection(network, display, preferences);
 AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);
@@ -55,16 +57,7 @@ void App::setup(){
 void App::loop(){
     unsigned long currentTime = millis();
 
-    // Проверяем, не проснулись ли мы из сна
-    if (power.getCurrentState() == SLEEP) {
-        // Если мы в режиме сна, но код выполняется - значит проснулись
-        power.wakeUp();
-        
-        // Восстанавливаем сеть после пробуждения
-        if (network.getCurrentState() != NetworkState::CONNECTED) {
-            connection.handle();
-        }
-    }
+    tool.transitionToDataUpdate(currentTime);
 
     resetBtn.update(currentTime);
     network.update(currentTime);
@@ -79,10 +72,10 @@ void App::loop(){
 
         if (network.getCurrentState() == NetworkState::CONNECTED){
             transmit.handle(data);
-        } else {
-            connection.handle();
         }
         
         lastDataUpdate = currentTime;
     }
+
+    tool.transitionToSleep(currentTime);
 }

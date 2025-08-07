@@ -48,11 +48,11 @@ void ResetButtonService::toggleSleepMode(){
         display.message("SLEEP", 1000);
         display.turnOff();
         wifi.disconnect();
-        power.enterSleepMode(pressStartTime);
-        power.sleep();
+        power.enterSleepMode();
+        power.sleep(pressStartTime);
     } else {
-        power.wakeUp();
-        power.enterActiveMode(pressStartTime);
+        power.wakeUp(pressStartTime);
+        power.enterActiveMode();
         display.turnOn();
     }
 }
