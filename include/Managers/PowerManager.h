@@ -28,7 +28,7 @@ public:
     DeviceState getCurrentState();
     unsigned long getInterval() const;
     unsigned long getTimeout() const;
-    unsigned long getLastActivityTime() const;
+
     unsigned long getSleepModeStartTime() const;
 
     void setupWakeUpSource();

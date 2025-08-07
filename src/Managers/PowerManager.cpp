@@ -9,6 +9,7 @@ sleepModeStartTime(0)
 
 void PowerManager::update(unsigned long currentTime) {
     if (currentTime - lastActivityTime >= SLEEP_TIMEOUT){
+        Serial.println("sleep timeout");
         enterSleepMode(currentTime);
     }
 
@@ -59,10 +60,6 @@ unsigned long PowerManager::getInterval() const {
 
 unsigned long PowerManager::getTimeout() const {
     return SLEEP_TIMEOUT;
-}
-
-unsigned long PowerManager::getLastActivityTime() const {
-    return lastActivityTime;
 }
 
 void PowerManager::setupWakeUpSource(){

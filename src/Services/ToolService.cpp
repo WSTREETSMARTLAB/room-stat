@@ -7,10 +7,11 @@ wifi(wifi)
 {}
 
 void ToolService::updateActivityMode(unsigned long currentTime){
-    DeviceState currentState = power.getCurrentState();
+    DeviceState state = power.getCurrentState();
+
     power.update(currentTime);
 
-    if (currentState != power.getCurrentState()){
+    if (state == power.getCurrentState()){
         return;
     }
 

@@ -56,15 +56,15 @@ void App::setup(){
 
 void App::loop(){
     unsigned long currentTime = millis();
-    tool.updateActivityMode(currentTime);
-    tool.transitionToDataUpdate(currentTime);
 
     resetBtn.update(currentTime);
     network.update(currentTime);
     server.handleClient();
 
+    tool.updateActivityMode(currentTime);
+    tool.transitionToDataUpdate(currentTime);
+
     if (currentTime - lastDataUpdate >= power.getInterval()){
-        Serial.println("wake up by timeout");
         data = dataCollecting.handle();
 
         if (power.getCurrentState() == ACTIVE){

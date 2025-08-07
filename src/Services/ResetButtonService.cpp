@@ -32,9 +32,11 @@ void ResetButtonService::update(unsigned long currentTime){
         
         if (pressDuration <= 1000) {
             if (power.getCurrentState() == ACTIVE){
+                Serial.println("turn to sleep by btn");
                 power.enterSleepMode(pressStartTime);
-            } else {
-                power.enterActiveMode(pressStartTime);
+                display.turnOff();
+                wifi.disconnect();
+                power.sleep();
             }
         }
 
