@@ -20,6 +20,7 @@ private:
 public:
     PowerManager();
     void enterSleepMode(unsigned long currentTime);
+    void sleep();
     void enterActiveMode(unsigned long currentTime);
     void wakeUp();
 

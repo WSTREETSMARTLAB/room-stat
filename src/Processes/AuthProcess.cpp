@@ -16,7 +16,7 @@ void AuthProcess::handle(){
     ToolConfig config;
     config = preferences.load();
 
-    display.message("Auth Tool", 3000);
+    display.message("Auth Tool", 2000);
     StaticJsonDocument<256> doc;
     doc["type"] = config.type;
     doc["code"] = config.code;
@@ -39,12 +39,9 @@ void AuthProcess::handle(){
         token = resDoc["data"]["token"] | "";
 
         if (token != ""){
-            display.message("Tool authorized", 2000);
-            display.message("Now you can use a dashboard", 2000);
-            display.message("www.wstreetsmartlab.systems", 2000);
+            display.message("Tool authorized", 1000);
         } else {
-            display.message("Token not received", 2000);
-            display.message("Please check a code", 2000);
+            display.message("Error. Please check a code", 2000);
         }
     }
 }

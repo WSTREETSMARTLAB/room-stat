@@ -8,7 +8,8 @@ class ConnectionProcess
 private:
     NetworkService& network;
     ToolPreferences& preferences;
+    DisplayManager& display;
 public:
-    ConnectionProcess(NetworkService& network, ToolPreferences& preferences);
+    ConnectionProcess(NetworkService& network, DisplayManager& display, ToolPreferences& preferences);
     void handle();
 };

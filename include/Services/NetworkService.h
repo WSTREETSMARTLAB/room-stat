@@ -11,7 +11,6 @@ private:
     NetworkState state;
     WiFiPointManager& wifi;
     AccessPointManager& accessPoint;
-    DisplayManager& display;
     
     unsigned long stateStart;
     unsigned long lastCheck;
@@ -31,7 +30,7 @@ private:
     void transitionTo(NetworkState newState);
     void updateMetrics(bool connectionSuccess);
 public:
-    NetworkService(WiFiPointManager& wifi, AccessPointManager& accessPoint, DisplayManager& display);
+    NetworkService(WiFiPointManager& wifi, AccessPointManager& accessPoint);
     void update(unsigned long currentTime);
     void attemptConnection(const String& ssid, const String& password);
     void startAP();

@@ -2,15 +2,13 @@
 
 NetworkService::NetworkService(
     WiFiPointManager& wifi,
-    AccessPointManager& accessPoint,
-    DisplayManager& display
+    AccessPointManager& accessPoint
 )
     : state(NetworkState::DISCONNECTED)
     , stateStart(millis())
     , lastCheck(0)
     , wifi(wifi)
     , accessPoint(accessPoint)
-    , display(display)
     , reconnectionAttempts(0)
     , totalConnectionAttempts(0)
     , successfulConnections(0)
@@ -28,17 +26,14 @@ void NetworkService::attemptConnection(const String& ssid, const String& passwor
         return;
     }
 
-    display.message("Connecting to Wi-Fi", 1000);
     wifi.connect(ssid, password);
     state = NetworkState::CONNECTING;
 
     if (wifi.isConnected){
         state = NetworkState::CONNECTED;
-        display.message("Connected", 1000);
         reconnectionAttempts = 0;
         return;
     } else {
-        display.message("Connection error", 1000);
         state = NetworkState::ERROR;
         wifi.disconnect();
     }
@@ -53,7 +48,6 @@ void NetworkService::startAP(){
     
     accessPoint.begin("Room_Stat_Access", "");
     state = NetworkState::AP_MODE;
-    display.message("Access Point Started", 2000);
 }
 
 void NetworkService::evaluateState(){

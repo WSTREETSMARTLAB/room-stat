@@ -9,29 +9,28 @@ sleepModeStartTime(0)
 
 void PowerManager::enterSleepMode(unsigned long currentTime) {
     currentState = DeviceState::SLEEP;
-    sleepModeStartTime = millis();
+    sleepModeStartTime = currentTime;
+}
 
-    // pinMode(IoNumber::PIN_DHT22, INPUT);
-    // pinMode(IoNumber::PIN_LDR, INPUT);
+void PowerManager::sleep(){
+    pinMode(IoNumber::PIN_DHT22, INPUT);
+    pinMode(IoNumber::PIN_LDR, INPUT);
 
-    // setCpuFrequencyMhz(80);
-    // esp_light_sleep_start();
+    setCpuFrequencyMhz(80);
+    esp_light_sleep_start();
 }
 
 void PowerManager::enterActiveMode(unsigned long currentTime) {
     currentState = DeviceState::ACTIVE;
     lastActivityTime = currentTime;
-
     sleepModeStartTime = 0;
 }
 
 void PowerManager::wakeUp(){
-    // pinMode(IoNumber::PIN_DHT22, INPUT_PULLUP);
-    // pinMode(IoNumber::PIN_LDR, INPUT_PULLUP);
-
-    // setCpuFrequencyMhz(240);
-
-    // delay(50);
+    setCpuFrequencyMhz(240);
+    pinMode(IoNumber::PIN_DHT22, INPUT_PULLUP);
+    pinMode(IoNumber::PIN_LDR, INPUT_PULLUP);
+    delay(50);
 }
 
 DeviceState PowerManager::getCurrentState() {
