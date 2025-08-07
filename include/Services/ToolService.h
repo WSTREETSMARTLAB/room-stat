@@ -11,6 +11,6 @@ private:
     WiFiPointManager& wifi;
 public:
     ToolService(PowerManager& power, DisplayManager& display, WiFiPointManager& wifi);
-    void transitionToSleep(unsigned long currentTime);
+    void updateActivityMode(unsigned long currentTime);
     void transitionToDataUpdate(unsigned long currentTime);
 };

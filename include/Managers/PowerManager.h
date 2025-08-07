@@ -20,10 +20,10 @@ private:
 public:
     PowerManager();
     void update(unsigned long currentTime);
-    void enterSleepMode();
-    void sleep(unsigned long currentTime);
-    void enterActiveMode();
-    void wakeUp(unsigned long currentTime);
+    void enterSleepMode(unsigned long currentTime);
+    void sleep();
+    void enterActiveMode(unsigned long currentTime);
+    void wakeUp();
 
     DeviceState getCurrentState();
     unsigned long getInterval() const;

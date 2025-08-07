@@ -64,6 +64,7 @@ void App::loop(){
     server.handleClient();
 
     if (currentTime - lastDataUpdate >= power.getInterval()){
+        Serial.println("wake up by timeout");
         data = dataCollecting.handle();
 
         if (power.getCurrentState() == ACTIVE){
