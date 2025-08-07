@@ -17,6 +17,7 @@ private:
 
     const unsigned long SLEEP_TIMEOUT = 30000;
     const unsigned long SLEEP_INTERVAL = 180000;
+    esp_sleep_wakeup_cause_t last_wakeup_reason;
 public:
     PowerManager();
     void enterSleepMode(unsigned long currentTime);
@@ -28,4 +29,9 @@ public:
     unsigned long getInterval() const;
 
     void setupWakeUpSource();
+    
+    // Методы для определения причины пробуждения
+    esp_sleep_wakeup_cause_t getWakeupReason() const;
+    bool isWakeupByButton() const;
+    bool isWakeupByTimer() const;
 };

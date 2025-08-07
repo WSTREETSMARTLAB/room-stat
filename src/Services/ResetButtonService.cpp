@@ -3,8 +3,9 @@
 #include <Storage/ToolPreferences.h>
 #include <Enum/IoNumber.h>
 
-ResetButtonService::ResetButtonService(PowerManager& power, DisplayManager& display): 
+ResetButtonService::ResetButtonService(PowerManager& power, WiFiPointManager& wifi, DisplayManager& display): 
 power(power),
+wifi(wifi),
 display(display)
 {}
 
@@ -44,12 +45,14 @@ void ResetButtonService::performReset(){
 
 void ResetButtonService::toggleSleepMode(){
     if (power.getCurrentState() == ACTIVE) {
+        display.message("SLEEP", 1000);
         display.turnOff();
-        // switch off wi-fi
+        wifi.disconnect();
         power.enterSleepMode(pressStartTime);
+        power.sleep();
     } else {
-        display.turnOn();
+        power.wakeUp();
         power.enterActiveMode(pressStartTime);
-        // connect to wi-fi
+        display.turnOn();
     }
 }
