@@ -7,16 +7,21 @@ wifi(wifi)
 {}
 
 void ToolService::updateActivityMode(unsigned long currentTime){
+    DeviceState currentState = power.getCurrentState();
     power.update(currentTime);
 
-    if (power.getCurrentState() == SLEEP && power.getSleepModeStartTime() == currentTime){
+    if (currentState != power.getCurrentState()){
+        return;
+    }
+
+    if (power.getCurrentState() == SLEEP){
         display.message("SLEEP", 2000);
         display.turnOff();
         wifi.disconnect();
         power.sleep();
     }
 
-    if (power.getCurrentState() == ACTIVE && power.getLastActivityTime() > currentTime){
+    if (power.getCurrentState() == ACTIVE){
         power.wakeUp();
         display.turnOn();
         display.message("WAKE UP", 2000);

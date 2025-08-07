@@ -14,7 +14,6 @@ private:
     bool isPressed = false;
 
     void performReset();
-    void toggleSleepMode();
 public:
     ResetButtonService(PowerManager& power, WiFiPointManager& wifi, DisplayManager& display);
     void begin();

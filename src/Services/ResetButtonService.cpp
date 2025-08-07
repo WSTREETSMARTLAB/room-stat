@@ -31,12 +31,11 @@ void ResetButtonService::update(unsigned long currentTime){
         } 
         
         if (pressDuration <= 1000) {
-            // toggleSleepMode();
-            display.message("SLEEP", 1000);
-            display.turnOff();
-            wifi.disconnect();
-            power.enterSleepMode(pressStartTime);
-            power.sleep();
+            if (power.getCurrentState() == ACTIVE){
+                power.enterSleepMode(pressStartTime);
+            } else {
+                power.enterActiveMode(pressStartTime);
+            }
         }
 
         isPressed = false;
@@ -46,18 +45,4 @@ void ResetButtonService::update(unsigned long currentTime){
 void ResetButtonService::performReset(){
     ToolPreferences::reset();
     ESP.restart();
-}
-
-void ResetButtonService::toggleSleepMode(){
-    if (power.getCurrentState() == ACTIVE) {
-        display.message("SLEEP", 1000);
-        display.turnOff();
-        wifi.disconnect();
-        power.enterSleepMode(pressStartTime);
-        power.sleep();
-    } else {
-        // power.wakeUp(pressStartTime);
-        // power.enterActiveMode();
-        display.turnOn();
-    }
 }

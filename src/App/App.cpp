@@ -56,7 +56,7 @@ void App::setup(){
 
 void App::loop(){
     unsigned long currentTime = millis();
-
+    tool.updateActivityMode(currentTime);
     tool.transitionToDataUpdate(currentTime);
 
     resetBtn.update(currentTime);
@@ -77,6 +77,4 @@ void App::loop(){
         
         lastDataUpdate = currentTime;
     }
-
-    tool.transitionToSleep(currentTime);
 }
