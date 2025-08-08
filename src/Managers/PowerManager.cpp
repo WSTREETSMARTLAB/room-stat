@@ -5,7 +5,7 @@
 PowerManager::PowerManager(){}
 
 void PowerManager::update(unsigned long currentTime) {
-    if (currentTime - lastActivityTime >= SLEEP_TIMEOUT){
+    if (currentTime - lastActivity >= SLEEP_TIMEOUT){
         enterSleepMode(currentTime);
     }
 
@@ -30,7 +30,7 @@ void PowerManager::sleep(){
 
 void PowerManager::enterActiveMode(unsigned long currentTime) {
     deviceState = DeviceState::ACTIVE;
-    lastActivityTime = currentTime;
+    lastActivity = currentTime;
     sleepModeStartTime = 0;
 }
 

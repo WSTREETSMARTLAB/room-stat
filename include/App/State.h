@@ -10,3 +10,4 @@ extern DeviceState deviceState;
 extern NetworkState networkState;
 extern unsigned long sleepModeStartTime;
 extern unsigned long lastDataUpdate;
+extern unsigned long lastActivity;

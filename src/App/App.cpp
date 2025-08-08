@@ -57,6 +57,19 @@ void App::loop(){
 
     synchronization.handle(currentTime);
 
+    if (deviceState == SLEEP && sleepModeStartTime == currentTime){
+        display.message("SLEEP MODE", 1000);
+        display.turnOff();
+        power.sleep();
+    }
+
+    if (deviceState == ACTIVE && sleepModeStartTime == 0){
+        power.wakeUp();
+        connection.handle();
+        display.turnOn();
+        display.message("ACTIVE MODE", 1000);
+    }
+    
     if (currentTime - lastDataUpdate >= power.getInterval()){
         if (deviceState == SLEEP){
             power.wakeUp();

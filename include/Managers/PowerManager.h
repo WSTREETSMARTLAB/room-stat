@@ -7,8 +7,6 @@
 class PowerManager
 {
 private:
-    unsigned long lastActivityTime;
-
     const unsigned long ACTIVE_INTERVAL = 3000;
     const unsigned long SLEEP_TIMEOUT = 30000;
     const unsigned long SLEEP_INTERVAL = 180000;
@@ -24,5 +22,4 @@ public:
     unsigned long getTimeout() const;
 
     void setupWakeUpSource();
-    void getLastActivityTime();
 };

@@ -31,7 +31,6 @@ void ResetButtonService::update(unsigned long currentTime){
         
         if (pressDuration <= 1000) {
             if (deviceState == ACTIVE){
-                display.message("SLEEP MODE", 1000);
                 power.enterSleepMode(pressStartTime);
             }
         }
