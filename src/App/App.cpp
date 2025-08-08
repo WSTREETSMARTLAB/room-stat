@@ -54,16 +54,17 @@ void App::setup(){
 
 void App::loop(){
     unsigned long currentTime = millis();
+    DeviceState state = deviceState;
 
     synchronization.handle(currentTime);
 
-    if (deviceState == SLEEP && sleepModeStartTime == currentTime){
+    if (state == ACTIVE && deviceState == SLEEP){
         display.message("SLEEP MODE", 1000);
         display.turnOff();
         power.sleep();
     }
 
-    if (deviceState == ACTIVE && sleepModeStartTime == 0){
+    if (state == SLEEP && deviceState == ACTIVE){
         power.wakeUp();
         connection.handle();
         display.turnOn();
@@ -92,10 +93,5 @@ void App::loop(){
         }
         
         lastDataUpdate = currentTime;
-
-        if (deviceState == SLEEP){
-            display.turnOff();
-            power.sleep();
-        }
     }
 }

@@ -15,7 +15,7 @@ void PowerManager::update(unsigned long currentTime) {
 }
 
 void PowerManager::enterSleepMode(unsigned long currentTime) {
-    deviceState = DeviceState::SLEEP;
+    deviceState = SLEEP;
     sleepModeStartTime = currentTime;
 }
 
@@ -29,7 +29,7 @@ void PowerManager::sleep(){
 }
 
 void PowerManager::enterActiveMode(unsigned long currentTime) {
-    deviceState = DeviceState::ACTIVE;
+    deviceState = ACTIVE;
     lastActivity = currentTime;
     sleepModeStartTime = 0;
 }
@@ -61,4 +61,3 @@ void PowerManager::setupWakeUpSource(){
     esp_sleep_enable_ext0_wakeup((gpio_num_t)IoNumber::PIN_RESET_BUTTON, 0);
     esp_sleep_enable_timer_wakeup(SLEEP_INTERVAL * 1000);
 }
-
