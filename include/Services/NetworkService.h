@@ -13,8 +13,8 @@ private:
     WiFiPointManager& wifi;
     AccessPointManager& accessPoint;
     
-    unsigned long stateStart;
     unsigned long lastCheck;
+    unsigned long lastSuccess;
     int reconnectionAttempts;
 
     const unsigned long CONNECTION_TIMEOUT = 15000;
@@ -29,6 +29,7 @@ public:
     void update(unsigned long currentTime);
     void attemptConnection(const String& ssid, const String& password);
     void startAP();
+    bool shouldReconnect(unsigned long currentTime);
 };
 
 

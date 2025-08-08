@@ -6,6 +6,5 @@ bool serverAlive = false;
 String token = "";
 DeviceState deviceState = ACTIVE;
 NetworkState networkState = DISCONNECTED;
-unsigned long lastActivityTime = 0;
 unsigned long sleepModeStartTime = 0;
 unsigned long lastDataUpdate = 0;

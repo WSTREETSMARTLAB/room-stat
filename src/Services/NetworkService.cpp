@@ -5,11 +5,11 @@ NetworkService::NetworkService(
     AccessPointManager& accessPoint
 )
     : state(NetworkState::DISCONNECTED)
-    , stateStart(millis())
     , lastCheck(0)
     , wifi(wifi)
     , accessPoint(accessPoint)
     , reconnectionAttempts(0)
+    , lastSuccess(0)
  {}
 
 void NetworkService::update(unsigned long currentTime){    
@@ -26,6 +26,7 @@ void NetworkService::attemptConnection(const String& ssid, const String& passwor
         if (wifi.isConnected()) {
             networkState = CONNECTED;
             reconnectionAttempts = 0;
+            lastSuccess = millis();
             break;
         } else {
             networkState = ERROR;
@@ -54,14 +55,23 @@ void NetworkService::evaluateState(unsigned long currentTime){
         }
     }
 
-    if (networkState == ERROR || networkState == DISCONNECTED){
+    if (networkState == DISCONNECTED){
         if (wifi.isConnected()){
             newState = CONNECTED;
         }
-    }    
+    }
+
+    if (networkState == ERROR){
+        if (currentTime - lastCheck >= CHECK_INTERVAL) {
+            newState = DISCONNECTED;
+        }
+    }
 
     if (newState != state) {
         networkState = newState;
-        stateStart = currentTime;
     }
+}
+
+bool NetworkService::shouldReconnect(unsigned long currentTime) {
+    return networkState == DISCONNECTED && currentTime - lastSuccess >= RECONNECT_TIMEOUT;
 }

@@ -8,6 +8,5 @@ extern String token;
 extern String serverUrl;
 extern DeviceState deviceState;
 extern NetworkState networkState;
-extern unsigned long lastActivityTime;
 extern unsigned long sleepModeStartTime;
-unsigned long lastDataUpdate;
+extern unsigned long lastDataUpdate;
