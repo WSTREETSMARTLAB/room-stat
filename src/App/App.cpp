@@ -15,6 +15,7 @@
 #include <Processes/ConnectionProcess.h>
 #include <Processes/DataCollectingProcess.h>
 #include <DTO/DataConfig.h>
+#include <Processes/SynchronizationProcess.h>
 #include <Processes/HealthCheckProcess.h>
 #include <Processes/VizualizationDataProcess.h>
 #include <Processes/TransmitDataProcess.h>
@@ -32,6 +33,7 @@ HealthCheckProcess healthCheck(api, display);
 NetworkService network(wifiPoint, accessPoint);
 ResetButtonService resetBtn(power, wifiPoint, display);
 ToolService tool(power, display, wifiPoint);
+SynchronizationProcess synchronization(power);
 ConnectionProcess connection(network, display, preferences);
 AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);
@@ -57,11 +59,11 @@ void App::setup(){
 void App::loop(){
     unsigned long currentTime = millis();
 
+    synchronization.handle(currentTime);
+
     resetBtn.update(currentTime);
     network.update(currentTime);
     server.handleClient();
-
-    tool.updateActivityMode(currentTime);
 
     if (currentTime - lastDataUpdate >= power.getInterval()){
         data = dataCollecting.handle();
