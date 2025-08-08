@@ -2,6 +2,7 @@
 #include <DTO/ToolConfig.h>
 #include <Storage/ToolPreferences.h>
 #include <Services/NetworkService.h>
+#include <App/State.h>
 
 class ConnectionProcess
 {

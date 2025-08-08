@@ -10,7 +10,7 @@ display(display)
 void ConnectionProcess::handle(){
     ToolConfig config = preferences.load();
 
-    if (network.getCurrentState() == NetworkState::CONNECTED || network.getCurrentState() == NetworkState::AP_MODE){
+    if (networkState == NetworkState::CONNECTED || networkState == NetworkState::AP_MODE){
         return;
     }
 
@@ -18,7 +18,7 @@ void ConnectionProcess::handle(){
         display.message("Connecting to Wi-Fi", 1000);
         network.attemptConnection(config.wifi_ssid, config.wifi_pass);
 
-        if (network.getCurrentState() == CONNECTED){
+        if (networkState == CONNECTED){
             display.message("Connected", 1000);
         } else {
             display.message("Connection failed", 1000);
