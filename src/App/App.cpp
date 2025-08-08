@@ -30,7 +30,7 @@ PowerManager power;
 ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
 NetworkService network(wifiPoint, accessPoint);
-ResetButtonService resetBtn(power, wifiPoint, display);
+ResetButtonService resetBtn(power);
 SynchronizationProcess synchronization(power, network, resetBtn);
 ConnectionProcess connection(network, display, preferences);
 AuthProcess auth(api, preferences, display);
@@ -49,8 +49,6 @@ void App::setup(){
     healthCheck.handle();
     auth.handle();
 
-    lastDataUpdate = millis();
-
     display.message("Ready!", 2000);
 }
 
@@ -59,8 +57,6 @@ void App::loop(){
 
     synchronization.handle(currentTime);
 
-    server.handleClient();
-
     if (currentTime - lastDataUpdate >= power.getInterval()){
         data = dataCollecting.handle();
 
@@ -68,7 +64,8 @@ void App::loop(){
             vizualization.handle(data);
         }
 
-        if (network.getCurrentState() == NetworkState::CONNECTED){
+        if (networkState == CONNECTED){
+            server.handleClient();
             transmit.handle(data);
         }
         

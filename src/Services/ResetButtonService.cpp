@@ -3,10 +3,8 @@
 #include <Storage/ToolPreferences.h>
 #include <Enum/IoNumber.h>
 
-ResetButtonService::ResetButtonService(PowerManager& power, WiFiPointManager& wifi, DisplayManager& display): 
-power(power),
-wifi(wifi),
-display(display)
+ResetButtonService::ResetButtonService(PowerManager& power):
+power(power)
 {}
 
 void ResetButtonService::begin(){
@@ -26,14 +24,13 @@ void ResetButtonService::update(unsigned long currentTime){
         unsigned long pressDuration = currentTime - pressStartTime;
 
         if (pressDuration >= 3000) {
-            display.message("reset", 3000);
+            // display.message("reset", 3000);
             // performReset();
         } 
         
         if (pressDuration <= 1000) {
             if (deviceState == ACTIVE){
                 power.enterSleepMode(pressStartTime);
-                display.turnOff();
             }
         }
 
