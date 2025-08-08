@@ -1,11 +1,8 @@
 #include <Managers/PowerManager.h>
 #include <Enum/IoNumber.h>
+#include <Enum/DeviceState.h>
 
-PowerManager::PowerManager(): 
-currentState(DeviceState::ACTIVE),
-lastActivityTime(millis()),
-sleepModeStartTime(0)
-{}
+PowerManager::PowerManager(){}
 
 void PowerManager::update(unsigned long currentTime) {
     if (currentTime - lastActivityTime >= SLEEP_TIMEOUT){
@@ -15,10 +12,14 @@ void PowerManager::update(unsigned long currentTime) {
     if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
         enterActiveMode(currentTime);
     }
+
+    if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER){
+        lastActivityTime = currentTime;
+    }
 }
 
 void PowerManager::enterSleepMode(unsigned long currentTime) {
-    currentState = DeviceState::SLEEP;
+    deviceState = DeviceState::SLEEP;
     sleepModeStartTime = currentTime;
 }
 
@@ -32,7 +33,7 @@ void PowerManager::sleep(){
 }
 
 void PowerManager::enterActiveMode(unsigned long currentTime) {
-    currentState = DeviceState::ACTIVE;
+    deviceState = DeviceState::ACTIVE;
     lastActivityTime = currentTime;
     sleepModeStartTime = 0;
 }
@@ -48,12 +49,8 @@ void PowerManager::wakeUp(){
     delay(50);
 }
 
-DeviceState PowerManager::getCurrentState() {
-    return currentState;
-}
-
 unsigned long PowerManager::getInterval() const {
-    if (currentState == SLEEP){
+    if (deviceState == SLEEP){
         return SLEEP_INTERVAL;
     }
     
@@ -67,9 +64,5 @@ unsigned long PowerManager::getTimeout() const {
 void PowerManager::setupWakeUpSource(){
     esp_sleep_enable_ext0_wakeup((gpio_num_t)IoNumber::PIN_RESET_BUTTON, 0);
     esp_sleep_enable_timer_wakeup(SLEEP_INTERVAL * 1000);
-}
-
-unsigned long PowerManager::getSleepModeStartTime() const {
-    return sleepModeStartTime;
 }
 

@@ -59,13 +59,12 @@ void App::loop(){
 
     synchronization.handle(currentTime);
 
-    resetBtn.update(currentTime);
     server.handleClient();
 
     if (currentTime - lastDataUpdate >= power.getInterval()){
         data = dataCollecting.handle();
 
-        if (power.getCurrentState() == ACTIVE){
+        if (deviceState == ACTIVE){
             vizualization.handle(data);
         }
 

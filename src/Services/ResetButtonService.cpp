@@ -15,14 +15,14 @@ void ResetButtonService::begin(){
 }
 
 void ResetButtonService::update(unsigned long currentTime){
-    bool currentState = digitalRead(IoNumber::PIN_RESET_BUTTON) == LOW;
+    bool btnState = digitalRead(IoNumber::PIN_RESET_BUTTON) == LOW;
 
-    if (currentState && !isPressed) {
+    if (btnState && !isPressed) {
         isPressed = true;
         pressStartTime = currentTime;
     } 
     
-    if (!currentState && isPressed) {
+    if (!btnState && isPressed) {
         unsigned long pressDuration = currentTime - pressStartTime;
 
         if (pressDuration >= 3000) {
@@ -31,10 +31,9 @@ void ResetButtonService::update(unsigned long currentTime){
         } 
         
         if (pressDuration <= 1000) {
-            if (power.getCurrentState() == ACTIVE){
+            if (deviceState == ACTIVE){
                 power.enterSleepMode(pressStartTime);
                 display.turnOff();
-                power.sleep();
             }
         }
 

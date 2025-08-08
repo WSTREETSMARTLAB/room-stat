@@ -1,20 +1,16 @@
 #pragma once
 #include <Arduino.h>
-#include <Enum/DeviceState.h>
+#include <App/State.h>
 #include <esp_sleep.h>
 #include <esp_pm.h>
 
 class PowerManager
 {
 private:
-    DeviceState currentState;
-    unsigned long lastActivityTime;
-    unsigned long sleepModeStartTime;
     unsigned long lastDataUpdate;
     unsigned long lastDataTransmit;
 
     const unsigned long ACTIVE_INTERVAL = 3000;
-
     const unsigned long SLEEP_TIMEOUT = 30000;
     const unsigned long SLEEP_INTERVAL = 180000;
 public:
@@ -25,11 +21,8 @@ public:
     void enterActiveMode(unsigned long currentTime);
     void wakeUp();
 
-    DeviceState getCurrentState();
     unsigned long getInterval() const;
     unsigned long getTimeout() const;
-
-    unsigned long getSleepModeStartTime() const;
 
     void setupWakeUpSource();
 };

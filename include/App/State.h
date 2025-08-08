@@ -5,6 +5,7 @@
 extern bool serverAlive;
 extern String token;
 extern String serverUrl;
-extern DeviceState currentDeviceState;
+extern DeviceState deviceState;
+extern NetworkState networkState;
 extern unsigned long lastActivityTime;
 extern unsigned long sleepModeStartTime;
