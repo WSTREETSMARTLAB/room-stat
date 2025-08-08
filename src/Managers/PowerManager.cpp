@@ -10,17 +10,10 @@ sleepModeStartTime(0)
 void PowerManager::update(unsigned long currentTime) {
     if (currentTime - lastActivityTime >= SLEEP_TIMEOUT){
         enterSleepMode(currentTime);
-        sleep();
     }
 
     if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
-        wakeUp();
         enterActiveMode(currentTime);
-    }
-
-    if (esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_TIMER){
-        wakeUp();
-        lastActivityTime = currentTime;
     }
 }
 

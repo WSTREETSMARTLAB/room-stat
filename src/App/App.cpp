@@ -10,7 +10,6 @@
 #include <Services/DHTService.h>
 #include <Services/LDRService.h>
 #include <Services/ResetButtonService.h>
-#include <Services/ToolService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
 #include <Processes/DataCollectingProcess.h>
@@ -32,8 +31,7 @@ ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
 NetworkService network(wifiPoint, accessPoint);
 ResetButtonService resetBtn(power, wifiPoint, display);
-ToolService tool(power, display, wifiPoint);
-SynchronizationProcess synchronization(power);
+SynchronizationProcess synchronization(power, network, resetBtn);
 ConnectionProcess connection(network, display, preferences);
 AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);
@@ -62,7 +60,6 @@ void App::loop(){
     synchronization.handle(currentTime);
 
     resetBtn.update(currentTime);
-    network.update(currentTime);
     server.handleClient();
 
     if (currentTime - lastDataUpdate >= power.getInterval()){
