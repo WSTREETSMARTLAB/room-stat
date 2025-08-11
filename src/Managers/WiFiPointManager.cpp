@@ -1,20 +1,18 @@
-#include <Network/WiFiPointManager.h>
+#include <Managers/WiFiPointManager.h>
 #include <WiFi.h>
 
-WiFiPointManager::WiFiPointManager(DisplayService& display)
-: display(display)
+WiFiPointManager::WiFiPointManager()
 {}
 
 void WiFiPointManager::connect(const String ssid, const String password) {
     WiFi.mode(WIFI_STA);
     WiFi.begin(ssid.c_str(), password.c_str());
-    String message = "Connecting to " + ssid;
-    display.loader([]() { return isConnected(); }, message);
+    delay(2000);
+}
 
-    if (!isConnected()){
-        WiFi.disconnect();
-        delay(1000);
-    }
+void WiFiPointManager::disconnect(){
+    WiFi.disconnect();
+    delay(2000);
 }
 
 bool WiFiPointManager::isConnected() {

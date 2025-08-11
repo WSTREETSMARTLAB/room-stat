@@ -1,5 +1,4 @@
 #include <Processes/TransmitDataProcess.h>
-#include <Network/WiFiPointManager.h>
 #include <App/State.h>
 #include <ArduinoJson.h>
 
@@ -8,7 +7,7 @@ TransmitDataProcess::TransmitDataProcess(ApiService& api)
 {}
 
 void TransmitDataProcess::handle(DataConfig& data){
-    if (!WiFiPointManager::isConnected() || !serverAlive){
+    if (!serverAlive){
         return;
     }
 
@@ -21,5 +20,5 @@ void TransmitDataProcess::handle(DataConfig& data){
     serializeJson(doc, payload);
     api.post("/room-stat/api/v1/transmit", payload, response);
 
-    Serial.println(response);
+    Serial.println("Data transmit");
 }

@@ -4,12 +4,12 @@
 #include <Adafruit_SSD1306.h>
 #include <DTO/DataConfig.h>
 
-class DisplayService
+class DisplayManager
 {
 private:
     Adafruit_SSD1306 display;
 public:
-    DisplayService();
+    DisplayManager();
     bool begin();
     void clear();
     void turnOff();
@@ -17,6 +17,6 @@ public:
 
     void logo(uint16_t delayMs);
     void message(const String message, uint16_t delayMs);
-    void loader(bool (*condition)(), const String message);
+    void loader(std::function<bool()> condition, const String message);
     void parameterScreen(String content, bool wifiStatus);
 };

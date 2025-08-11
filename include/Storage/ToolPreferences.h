@@ -9,4 +9,5 @@ public:
     ToolPreferences();
     void save(const ToolConfig& config);
     ToolConfig load();
+    static void reset();
 };
