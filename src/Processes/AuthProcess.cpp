@@ -16,7 +16,6 @@ void AuthProcess::handle(){
     ToolConfig config;
     config = preferences.load();
 
-    display.message("Auth Tool", 2000);
     StaticJsonDocument<256> doc;
     doc["type"] = config.type;
     doc["code"] = config.code;
@@ -26,7 +25,6 @@ void AuthProcess::handle(){
 
     String response;
 
-    display.message("Sending Auth Request", 2000);
     if(apiService.post("/core/api/v1/tools/auth", payload, response)){
         StaticJsonDocument<256> resDoc;
         DeserializationError error = deserializeJson(resDoc, response);

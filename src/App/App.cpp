@@ -18,6 +18,7 @@
 #include <Processes/HealthCheckProcess.h>
 #include <Processes/VizualizationDataProcess.h>
 #include <Processes/TransmitDataProcess.h>
+#include <Processes/ToggleModeProcess.h>
 
 WebServer server(80);
 DHTService dht;
@@ -37,6 +38,7 @@ AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);
 VizualizationDataProcess vizualization(display);
 TransmitDataProcess transmit(api);
+ToggleModeProcess toggleMode(power, display);
 DataConfig data;
 
 void App::setup(){
@@ -56,26 +58,15 @@ void App::loop(){
     unsigned long currentTime = millis();
     DeviceState state = deviceState;
 
+    Serial.println("loop: " + String(currentTime));
+
     synchronization.handle(currentTime);
 
-    if (state == ACTIVE && deviceState == SLEEP){
-        display.message("SLEEP MODE", 1000);
-        display.turnOff();
-        power.sleep();
-    }
-
-    if (state == SLEEP && deviceState == ACTIVE){
-        power.wakeUp();
-        connection.handle();
-        display.turnOn();
-        display.message("ACTIVE MODE", 1000);
-    }
+    if (state != deviceState){
+        toggleMode.handle(state);
+    }  
     
     if (currentTime - lastDataUpdate >= power.getInterval()){
-        if (deviceState == SLEEP){
-            power.wakeUp();
-        }
-
         data = dataCollecting.handle();
 
         if (deviceState == ACTIVE){
@@ -93,5 +84,5 @@ void App::loop(){
         }
         
         lastDataUpdate = currentTime;
-    }
+    }  
 }

@@ -8,24 +8,21 @@ void PowerManager::update(unsigned long currentTime) {
     if (currentTime - lastActivity >= SLEEP_TIMEOUT){
         enterSleepMode(currentTime);
     }
-
-    if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
-        enterActiveMode(currentTime);
-    }
 }
 
 void PowerManager::enterSleepMode(unsigned long currentTime) {
     deviceState = SLEEP;
     sleepModeStartTime = currentTime;
+    lastActivity = currentTime;
 }
 
 void PowerManager::sleep(){
-    pinMode(IoNumber::PIN_DHT22, INPUT);
-    pinMode(IoNumber::PIN_LDR, INPUT);
-
     setCpuFrequencyMhz(80);
-    esp_sleep_disable_wifi_wakeup();
     esp_light_sleep_start();
+
+    if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
+        enterActiveMode(millis());
+    }
 }
 
 void PowerManager::enterActiveMode(unsigned long currentTime) {
@@ -36,11 +33,6 @@ void PowerManager::enterActiveMode(unsigned long currentTime) {
 
 void PowerManager::wakeUp(){
     setCpuFrequencyMhz(240);
-    
-    pinMode(IoNumber::PIN_DHT22, INPUT_PULLUP);
-    pinMode(IoNumber::PIN_LDR, INPUT_PULLUP);
-
-    esp_sleep_enable_wifi_wakeup();
     
     delay(50);
 }
