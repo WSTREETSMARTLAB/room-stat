@@ -1,10 +1,9 @@
 #include <Services/LDRService.h>
-
-#define LDR_PIN 34
+#include <Enum/IoNumber.h>
 
 int LDRService::read(){
-    int raw = analogRead(LDR_PIN);
-    float percent = (raw / 4095.0) * 99 + 1;
-
+    int raw = analogRead(IoNumber::PIN_LDR);
+    float percent = ((4095 - raw) / 4095.0) * 99 + 1;
+    
     return percent;
 }

@@ -5,119 +5,73 @@ NetworkService::NetworkService(
     AccessPointManager& accessPoint
 )
     : state(NetworkState::DISCONNECTED)
-    , stateStart(millis())
     , lastCheck(0)
     , wifi(wifi)
     , accessPoint(accessPoint)
     , reconnectionAttempts(0)
-    , totalConnectionAttempts(0)
-    , successfulConnections(0)
-    , lastSuccessfulConnection(0) {}
+    , lastSuccess(0)
+ {}
 
-void NetworkService::update(){
-    unsigned long currentTime = millis();
-    
+void NetworkService::update(unsigned long currentTime){    
     if (currentTime - lastCheck >= CHECK_INTERVAL) {
-        evaluateState();
+        evaluateState(currentTime);
         lastCheck = currentTime;
     }
 }
 
 void NetworkService::attemptConnection(const String& ssid, const String& password){
-    if (state == NetworkState::CONNECTING || state == NetworkState::RECONNECTING) {
-        return;
-    }
-
-    state = NetworkState::CONNECTING;
-    wifi.connect(ssid, password);
-
-    if (wifi.isConnected){
-        state = NetworkState::CONNECTED;
+    while (networkState != CONNECTED && reconnectionAttempts < MAX_RECONNECTION_ATTEMPTS) {
+        wifi.connect(ssid, password);
+        
+        if (wifi.isConnected()) {
+            networkState = CONNECTED;
+            reconnectionAttempts = 0;
+            lastSuccess = millis();
+            break;
+        } else {
+            networkState = ERROR;
+            wifi.disconnect();
+            reconnectionAttempts++;
+            delay(500);
+        }
     }
 }
 
 void NetworkService::startAP(){
-    if (state == NetworkState::AP_MODE) {
+    if (networkState == AP_MODE) {
         return;
     }
     
     accessPoint.begin("Room_Stat_Access", "");
-    state = NetworkState::AP_MODE;
-
+    networkState = AP_MODE;
 }
 
-void NetworkService::forceReconnection(){
-    //
-}
+void NetworkService::evaluateState(unsigned long currentTime){
+    NetworkState newState = networkState;
 
-void NetworkService::reset(){
-    //
-}
-
-void NetworkService::evaluateState(){
-    NetworkState newState = state;
-
-    switch (state)
-    {
-    case NetworkState::DISCONNECTED:   
-        break;
-    case NetworkState::CONNECTING:
-        if (getTimeInCurrentState() > CONNECTION_TIMEOUT) {
-            newState = NetworkState::RECONNECTING;
-            updateMetrics(false);
-        } else if (wifi.isConnected()) {
-            newState = NetworkState::CONNECTED;
-            updateMetrics(true);
+    if (networkState == CONNECTED){
+        if (!wifi.isConnected()){
+            newState = DISCONNECTED;
         }
-        break;
-    case NetworkState::CONNECTED:
-        if (!wifi.isConnected()) {
-            newState = NetworkState::RECONNECTING;
+    }
+
+    if (networkState == DISCONNECTED){
+        if (wifi.isConnected()){
+            newState = CONNECTED;
         }
-        break;
-    case NetworkState::RECONNECTING:
-        if (getTimeInCurrentState() > RECONNECT_TIMEOUT) {
-            if (reconnectionAttempts >= MAX_RECONNECTION_ATTEMPTS) {
-                newState = NetworkState::AP_MODE;
-            } else {
-                reconnectionAttempts++;
-                stateStart = millis();
-            }
-            } else if (wifi.isConnected()) {
-                newState = NetworkState::CONNECTED;
-                updateMetrics(true);
-                reconnectionAttempts = 0;
-            }
-        break;
-    case NetworkState::AP_MODE:        
-        break;
-    case NetworkState::ERROR:
-        break;
-    default:
-        break;
+    }
+
+    if (networkState == ERROR){
+        if (currentTime - lastCheck >= CHECK_INTERVAL) {
+            newState = DISCONNECTED;
+        }
     }
 
     if (newState != state) {
-        transitionTo(newState);
+        networkState = newState;
     }
 }
 
-void NetworkService::transitionTo(NetworkState newState){
-    state = newState;
-    stateStart = millis();
-}
-
-unsigned long NetworkService::getTimeInCurrentState() const {
-    return millis() - stateStart;
-}
-
-NetworkState NetworkService::getCurrentState() const {
-    return state;
-}
-
-void NetworkService::updateMetrics(bool connectionSuccess){
-    if (connectionSuccess) {
-        successfulConnections++;
-        lastSuccessfulConnection = millis();
-    }
+bool NetworkService::shouldReconnect(unsigned long currentTime) {
+    return networkState == DISCONNECTED && currentTime - lastSuccess >= RECONNECT_TIMEOUT;
 }

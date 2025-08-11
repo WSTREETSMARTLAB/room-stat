@@ -1,12 +1,12 @@
 #pragma once
-#include <Services/DisplayService.h>
+#include <Managers/DisplayManager.h>
 #include <DTO/DataConfig.h>
 
 class VizualizationDataProcess
 {
 private:
-    DisplayService& display;
+    DisplayManager& display;
 public:
-    VizualizationDataProcess(DisplayService& display);
+    VizualizationDataProcess(DisplayManager& display);
     void handle(DataConfig& data);
 };

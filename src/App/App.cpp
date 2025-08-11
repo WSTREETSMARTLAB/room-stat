@@ -1,56 +1,84 @@
 #include <App/App.h>
-#include <WiFi.h>
+#include <App/State.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
-#include <Network/AccessPointManager.h>
-#include <Network/WiFiPointManager.h>
+#include <Managers/DisplayManager.h>
+#include <Managers/AccessPointManager.h>
+#include <Managers/WiFiPointManager.h>
+#include <Managers/PowerManager.h>
 #include <DTO/ToolConfig.h>
 #include <Services/ApiService.h>
 #include <Services/DHTService.h>
 #include <Services/LDRService.h>
-#include <Services/DisplayService.h>
+#include <Services/ResetButtonService.h>
 #include <Processes/AuthProcess.h>
 #include <Processes/ConnectionProcess.h>
 #include <Processes/DataCollectingProcess.h>
 #include <DTO/DataConfig.h>
+#include <Processes/SynchronizationProcess.h>
 #include <Processes/HealthCheckProcess.h>
 #include <Processes/VizualizationDataProcess.h>
 #include <Processes/TransmitDataProcess.h>
+#include <Processes/ToggleModeProcess.h>
 
 WebServer server(80);
 DHTService dht;
 LDRService ldr;
 ApiService api;
-DisplayService display;
-AccessPointManager accessPointManager(server, display);
-WiFiPointManager wifiPointManager(display);
+DisplayManager display;
+AccessPointManager accessPoint(server);
+WiFiPointManager wifiPoint;
+PowerManager power;
 ToolPreferences preferences;
 HealthCheckProcess healthCheck(api, display);
-NetworkService network(wifiPointManager, accessPointManager);
-ConnectionProcess connection(network, preferences);
+NetworkService network(wifiPoint, accessPoint);
+ResetButtonService resetBtn(power, display);
+SynchronizationProcess synchronization(power, network, resetBtn);
+ConnectionProcess connection(network, display, preferences);
 AuthProcess auth(api, preferences, display);
 DataCollectingProcess dataCollecting(dht, ldr);
 VizualizationDataProcess vizualization(display);
 TransmitDataProcess transmit(api);
+ToggleModeProcess toggleMode(power, display);
 DataConfig data;
 
 void App::setup(){
     display.begin();
-    display.message("Setup", 2000);
+    display.message("Setup", 1000);
 
+    resetBtn.begin();
     dht.begin();
     connection.handle();
     healthCheck.handle();
     auth.handle();
 
-    display.message("Ready!", 3000);
+    display.message("Ready!", 2000);
 }
 
 void App::loop(){
-    server.handleClient();
+    unsigned long currentTime = millis();
+    DeviceState state = deviceState;
 
-    data = dataCollecting.handle();
-    connection.handle();
-    transmit.handle(data);
-    vizualization.handle(data);
+    synchronization.handle(currentTime);
+
+    if (state != deviceState){
+        toggleMode.handle(state);
+    }
+    
+    if (currentTime - lastDataUpdate >= power.getInterval()){
+        data = dataCollecting.handle();
+
+        if (deviceState == ACTIVE){
+            vizualization.handle(data);
+        }
+
+        if (network.shouldReconnect(currentTime)){
+            connection.handle();
+        }
+
+        if (networkState == CONNECTED){
+            server.handleClient();
+            transmit.handle(data);
+        }
+    }
 }
