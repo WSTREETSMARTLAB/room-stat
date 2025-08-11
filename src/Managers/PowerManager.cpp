@@ -6,27 +6,25 @@
 PowerManager::PowerManager(){}
 
 void PowerManager::update(unsigned long currentTime) {
-    if (currentTime - lastActivity >= SLEEP_TIMEOUT){
+    wakeCause = esp_sleep_get_wakeup_cause();
+
+    if (deviceState == ACTIVE && (currentTime - lastActivity >= SLEEP_TIMEOUT)){
         enterSleepMode(currentTime);
     }
 
-    if (!caseChecked){
-        if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
-            enterActiveMode(currentTime);
-        }
-
-        caseChecked = true;
+    if(wakeCause == ESP_SLEEP_WAKEUP_EXT0){
+        enterActiveMode(currentTime);
     }
 }
 
 void PowerManager::enterSleepMode(unsigned long currentTime) {
     deviceState = SLEEP;
     sleepModeStartTime = currentTime;
+    wakeCause = ESP_SLEEP_WAKEUP_UNDEFINED;
 }
 
 void PowerManager::sleep(){
     setupWakeUpSource();
-    caseChecked = false;
     setCpuFrequencyMhz(80);
     esp_light_sleep_start();
 }
@@ -34,6 +32,7 @@ void PowerManager::sleep(){
 void PowerManager::enterActiveMode(unsigned long currentTime) {
     deviceState = ACTIVE;
     sleepModeStartTime = 0;
+    wakeCause = ESP_SLEEP_WAKEUP_UNDEFINED;
 }
 
 void PowerManager::wakeUp(){
