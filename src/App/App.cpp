@@ -64,15 +64,14 @@ void App::loop(){
 
     if (state != deviceState){
         toggleMode.handle(state);
-    }  
+    }
+
+    if (!lastDataUpdate){
+        lastDataUpdate = currentTime - power.getInterval();
+    }
     
     if (currentTime - lastDataUpdate >= power.getInterval()){
         data = dataCollecting.handle();
-
-        if (deviceState == ACTIVE){
-            display.turnOn();
-            vizualization.handle(data);
-        }
 
         if (network.shouldReconnect(currentTime)){
             connection.handle();
@@ -84,5 +83,9 @@ void App::loop(){
         }
         
         lastDataUpdate = currentTime;
-    }  
+    }
+
+    if (deviceState == ACTIVE){
+        vizualization.handle(data);
+    }
 }

@@ -31,7 +31,10 @@ void ResetButtonService::update(unsigned long currentTime){
         
         if (pressDuration <= 1000) {
             if (deviceState == ACTIVE){
+                lastActivity = pressStartTime;
                 power.enterSleepMode(pressStartTime);
+            } else {
+                power.enterActiveMode(pressStartTime);
             }
         }
 

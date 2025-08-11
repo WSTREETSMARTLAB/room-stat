@@ -14,8 +14,8 @@ void ToggleModeProcess::handle(DeviceState state){
 
     if (state == SLEEP && deviceState == ACTIVE){
         power.wakeUp();
-        Serial.println("switch to ACTIVE");
         display.turnOn();
+        Serial.println("switch to ACTIVE");
         display.message("ACTIVE MODE", 1000);
     }
 };

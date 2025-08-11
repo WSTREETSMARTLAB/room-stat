@@ -5,24 +5,24 @@
 PowerManager::PowerManager(){}
 
 void PowerManager::update(unsigned long currentTime) {
-    if (currentTime - lastActivity >= SLEEP_TIMEOUT){
+    if (deviceState == ACTIVE && currentTime - lastActivity >= SLEEP_TIMEOUT){
+        Serial.println("activity interval detected: " + String(currentTime));
         enterSleepMode(currentTime);
+    }
+
+    if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
+        enterActiveMode(currentTime);
     }
 }
 
 void PowerManager::enterSleepMode(unsigned long currentTime) {
     deviceState = SLEEP;
     sleepModeStartTime = currentTime;
-    lastActivity = currentTime;
 }
 
 void PowerManager::sleep(){
     setCpuFrequencyMhz(80);
     esp_light_sleep_start();
-
-    if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
-        enterActiveMode(millis());
-    }
 }
 
 void PowerManager::enterActiveMode(unsigned long currentTime) {
@@ -33,7 +33,6 @@ void PowerManager::enterActiveMode(unsigned long currentTime) {
 
 void PowerManager::wakeUp(){
     setCpuFrequencyMhz(240);
-    
     delay(50);
 }
 
