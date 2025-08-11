@@ -2,6 +2,7 @@
 #include <Managers/PowerManager.h>
 #include <Storage/ToolPreferences.h>
 #include <Enum/IoNumber.h>
+#include <App/State.h>
 
 ResetButtonService::ResetButtonService(PowerManager& power, DisplayManager& display):
 power(power),
@@ -19,6 +20,7 @@ void ResetButtonService::update(unsigned long currentTime){
     if (btnState && !isPressed) {
         isPressed = true;
         pressStartTime = currentTime;
+        lastActivity = pressStartTime;
     } 
     
     if (!btnState && isPressed) {
@@ -31,10 +33,7 @@ void ResetButtonService::update(unsigned long currentTime){
         
         if (pressDuration <= 1000) {
             if (deviceState == ACTIVE){
-                lastActivity = pressStartTime;
                 power.enterSleepMode(pressStartTime);
-            } else {
-                power.enterActiveMode(pressStartTime);
             }
         }
 

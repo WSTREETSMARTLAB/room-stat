@@ -13,4 +13,6 @@ void SynchronizationProcess::handle(unsigned long currentTime){
     power.update(currentTime);
     resetBtn.update(currentTime);
     network.update(currentTime);
+
+    Serial.println(deviceState == ACTIVE ? "after sync in sync process ACTIVE" : "after sync in sync process SLEEP");
 }

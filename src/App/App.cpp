@@ -1,4 +1,5 @@
 #include <App/App.h>
+#include <App/State.h>
 #include <WebServer.h>
 #include <Storage/ToolPreferences.h>
 #include <Managers/DisplayManager.h>
@@ -58,20 +59,24 @@ void App::loop(){
     unsigned long currentTime = millis();
     DeviceState state = deviceState;
 
-    Serial.println("loop: " + String(currentTime));
+    Serial.println(state == ACTIVE ? "state ACTIVE" : "state SLEEP");
+
+    Serial.println(deviceState == ACTIVE ? "ACTIVE" : "SLEEP");
 
     synchronization.handle(currentTime);
+
+    Serial.println(deviceState == ACTIVE ? "after sync in App.cpp ACTIVE" : "after sync in App.cpp SLEEP");
 
     if (state != deviceState){
         toggleMode.handle(state);
     }
-
-    if (!lastDataUpdate){
-        lastDataUpdate = currentTime - power.getInterval();
-    }
     
     if (currentTime - lastDataUpdate >= power.getInterval()){
         data = dataCollecting.handle();
+
+        if (deviceState == ACTIVE){
+            vizualization.handle(data);
+        }
 
         if (network.shouldReconnect(currentTime)){
             connection.handle();
@@ -81,11 +86,5 @@ void App::loop(){
             server.handleClient();
             transmit.handle(data);
         }
-        
-        lastDataUpdate = currentTime;
-    }
-
-    if (deviceState == ACTIVE){
-        vizualization.handle(data);
     }
 }

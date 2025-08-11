@@ -1,6 +1,5 @@
 #pragma once
 #include <Arduino.h>
-#include <App/State.h>
 #include <esp_sleep.h>
 #include <esp_pm.h>
 
