@@ -10,8 +10,12 @@ void PowerManager::update(unsigned long currentTime) {
         enterSleepMode(currentTime);
     }
 
-    if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
-        enterActiveMode(currentTime);
+    if (!caseChecked){
+        if(esp_sleep_get_wakeup_cause() == ESP_SLEEP_WAKEUP_EXT0){
+            enterActiveMode(currentTime);
+        }
+
+        caseChecked = true;
     }
 }
 
@@ -21,6 +25,8 @@ void PowerManager::enterSleepMode(unsigned long currentTime) {
 }
 
 void PowerManager::sleep(){
+    setupWakeUpSource();
+    caseChecked = false;
     setCpuFrequencyMhz(80);
     esp_light_sleep_start();
 }

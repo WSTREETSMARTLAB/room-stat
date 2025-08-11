@@ -17,10 +17,9 @@ private:
     unsigned long lastSuccess;
     int reconnectionAttempts;
 
-    const unsigned long CONNECTION_TIMEOUT = 15000;
     const unsigned long AP_TIMEOUT = 300000;
     const unsigned long CHECK_INTERVAL = 5000;
-    const unsigned long RECONNECT_TIMEOUT = 30000;
+    const unsigned long RECONNECT_TIMEOUT = 15000;
     const int MAX_RECONNECTION_ATTEMPTS = 3;
 
     void evaluateState(unsigned long currentTime);
