@@ -59,13 +59,7 @@ void App::loop(){
     unsigned long currentTime = millis();
     DeviceState state = deviceState;
 
-    Serial.println(state == ACTIVE ? "state ACTIVE" : "state SLEEP");
-
-    Serial.println(deviceState == ACTIVE ? "ACTIVE" : "SLEEP");
-
     synchronization.handle(currentTime);
-
-    Serial.println(deviceState == ACTIVE ? "after sync in App.cpp ACTIVE" : "after sync in App.cpp SLEEP");
 
     if (state != deviceState){
         toggleMode.handle(state);

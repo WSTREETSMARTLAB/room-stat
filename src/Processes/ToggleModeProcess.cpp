@@ -8,6 +8,7 @@ void ToggleModeProcess::handle(DeviceState state){
     if (state == ACTIVE && deviceState == SLEEP){
         display.message("SLEEP MODE", 1000);
         display.turnOff();
+
         power.sleep();
     }
 
