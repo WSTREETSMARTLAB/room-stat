@@ -6,6 +6,7 @@
 class PowerManager
 {
 private:
+    bool caseChecked = true;
     const unsigned long SLEEP_TIMEOUT = 30000;
     const unsigned long ACTIVE_INTERVAL = 15000;
     const unsigned long SLEEP_INTERVAL = 180000;
