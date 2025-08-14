@@ -59,6 +59,8 @@ void App::loop(){
     unsigned long currentTime = millis();
     DeviceState state = deviceState;
 
+    Serial.println(deviceState == ACTIVE ? "ACTIVE" : "SLEEP");
+
     synchronization.handle(currentTime);
 
     if (state != deviceState){
