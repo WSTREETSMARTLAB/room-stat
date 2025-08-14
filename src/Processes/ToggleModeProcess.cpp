@@ -11,7 +11,9 @@ void ToggleModeProcess::handle(unsigned long currentTime){
             display.turnOff();
         }
         
-        power.sleep();
+        if (currentTime >= (lastDataUpdate + power.getSleepActivityInterval())){
+            power.sleep();
+        }
     }
 
     if ((deviceState == ACTIVE) && (lastActivity == currentTime)){

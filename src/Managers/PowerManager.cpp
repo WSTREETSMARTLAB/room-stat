@@ -66,6 +66,18 @@ unsigned long PowerManager::getTimeout() const {
     return SLEEP_TIMEOUT;
 }
 
+unsigned long PowerManager::getSleepActivityInterval() const {    
+    return SLEEP_ACTIVITY_INTERVAL;
+}
+
+unsigned long PowerManager::getDataTransmittingDelay() const {    
+    if (deviceState == SLEEP){
+        return SLEEP_INTERVAL - SLEEP_ACTIVITY_INTERVAL;
+    }
+
+    return ACTIVE_INTERVAL;
+}
+
 void PowerManager::setupWakeUpSource(){
     esp_sleep_enable_ext0_wakeup((gpio_num_t)IoNumber::PIN_RESET_BUTTON, 0);
     esp_sleep_enable_timer_wakeup(SLEEP_INTERVAL * 1000);
