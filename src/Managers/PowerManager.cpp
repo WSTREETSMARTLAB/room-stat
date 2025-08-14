@@ -18,13 +18,7 @@ void PowerManager::update(unsigned long currentTime) {
         }
     }
 
-    if (currentWakeCause == ESP_SLEEP_WAKEUP_TIMER){
-        if (deviceState == SLEEP && (currentTime - lastDataUpdate >= SLEEP_INTERVAL)){
-            sleep();
-        }
-    }
-
-    if (deviceState == ACTIVE && (currentTime - lastActivity >= SLEEP_TIMEOUT)){
+    if (currentTime - lastActivity >= SLEEP_TIMEOUT){
         enterSleepMode(currentTime);
     }
 
@@ -43,7 +37,6 @@ void PowerManager::enterSleepMode(unsigned long currentTime) {
 }
 
 void PowerManager::sleep(){
-    setupWakeUpSource();
     setCpuFrequencyMhz(80);
     esp_light_sleep_start();
 }
