@@ -11,6 +11,7 @@ display(display)
 
 void ResetButtonService::begin(){
     pinMode(IoNumber::PIN_RESET_BUTTON, INPUT_PULLUP);
+    power.setupWakeUpSource();
 }
 
 void ResetButtonService::update(unsigned long currentTime){
@@ -19,7 +20,6 @@ void ResetButtonService::update(unsigned long currentTime){
     if (btnState && !isPressed) {
         isPressed = true;
         pressStartTime = currentTime;
-        lastActivity = pressStartTime;
     } 
     
     if (!btnState && isPressed) {
@@ -30,9 +30,9 @@ void ResetButtonService::update(unsigned long currentTime){
             // performReset();
         } 
         
-        if (pressDuration <= 1000 && pressDuration > 50) {
+        if ((pressDuration <= 1000) && (pressDuration > 50)) {
             if (deviceState == ACTIVE){
-                power.enterSleepMode(pressStartTime);
+                power.enterSleepMode(currentTime);
             }
         }
 

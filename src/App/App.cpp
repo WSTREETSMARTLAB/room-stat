@@ -36,7 +36,7 @@ ResetButtonService resetBtn(power, display);
 SynchronizationProcess synchronization(power, network, resetBtn);
 ConnectionProcess connection(network, display, preferences);
 AuthProcess auth(api, preferences, display);
-DataCollectingProcess dataCollecting(dht, ldr);
+DataCollectingProcess dataCollecting(dht, ldr, power);
 VizualizationDataProcess vizualization(display);
 TransmitDataProcess transmit(api);
 ToggleModeProcess toggleMode(power, display);
@@ -57,21 +57,20 @@ void App::setup(){
 
 void App::loop(){
     unsigned long currentTime = millis();
-    DeviceState state = deviceState;
 
-    synchronization.handle(currentTime);
-
-    if (state != deviceState){
-        toggleMode.handle(state);
-    }
+    Serial.println(deviceState == ACTIVE ? "ACTIVE" : "SLEEP");
     
-    if (currentTime - lastDataUpdate >= power.getInterval()){
-        data = dataCollecting.handle();
+    if (currentTime >= (lastDataUpdate + power.getDataTransmittingDelay())){
+        data = dataCollecting.handle(currentTime);
 
         if (deviceState == ACTIVE){
             vizualization.handle(data);
         }
 
+        Serial.println("Data updated");
+    }
+
+    if (currentTime >= (lastDataTransmit + power.getDataTransmittingDelay())){
         if (network.shouldReconnect(currentTime)){
             connection.handle();
         }
@@ -79,6 +78,11 @@ void App::loop(){
         if (networkState == CONNECTED){
             server.handleClient();
             transmit.handle(data);
+            lastDataTransmit = currentTime;
+            Serial.println("Data transmitted");
         }
     }
+
+    synchronization.handle(currentTime);
+    toggleMode.handle(currentTime);
 }

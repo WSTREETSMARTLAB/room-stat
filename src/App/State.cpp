@@ -7,4 +7,6 @@ DeviceState deviceState = ACTIVE;
 NetworkState networkState = DISCONNECTED;
 unsigned long sleepModeStartTime = 0;
 unsigned long lastDataUpdate = 0;
+unsigned long lastDataTransmit = 0;
+unsigned long nextDataUpdate = 0;
 unsigned long lastActivity = millis();
