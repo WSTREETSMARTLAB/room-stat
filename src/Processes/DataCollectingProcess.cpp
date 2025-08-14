@@ -15,7 +15,5 @@ DataConfig DataCollectingProcess::handle(){
     data.humidity = dhtSensorData[HUMIDITY];
     data.light = ldr.read();
 
-    lastDataUpdate = millis();
-
     return data;
 }

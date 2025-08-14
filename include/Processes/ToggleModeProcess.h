@@ -10,5 +10,5 @@ private:
     DisplayManager& display;
 public:
     ToggleModeProcess(PowerManager& power, DisplayManager& display);
-    void handle();
+    void handle(unsigned long currentTime);
 };

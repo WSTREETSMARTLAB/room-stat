@@ -57,25 +57,13 @@ void App::setup(){
 
 void App::loop(){
     unsigned long currentTime = millis();
-    DeviceState state = deviceState;
-
-    Serial.println(state == ACTIVE ? "state ACTIVE" : "state SLEEP");
 
     synchronization.handle(currentTime);
-
-    if (state == SLEEP){
-        power.sleep();
-    }
-
-    if (state != deviceState){
-        toggleMode.handle();
-    }
-
-    Serial.println(deviceState == ACTIVE ? "device ACTIVE" : "device SLEEP");
+    toggleMode.handle(currentTime);
     
     if (currentTime - lastDataUpdate >= power.getInterval()){
         data = dataCollecting.handle();
-        Serial.println("Data updated");
+        lastDataUpdate == currentTime;
 
         if (deviceState == ACTIVE){
             vizualization.handle(data);

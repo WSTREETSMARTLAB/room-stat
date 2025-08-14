@@ -31,7 +31,6 @@ void PowerManager::enterSleepMode(unsigned long currentTime) {
     if (deviceState != SLEEP){
         deviceState = SLEEP;
         sleepModeStartTime = currentTime;
-        wakeCause = ESP_SLEEP_WAKEUP_UNDEFINED;
         resetWakeCause();
     }
 }

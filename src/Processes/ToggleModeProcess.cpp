@@ -4,16 +4,19 @@ ToggleModeProcess::ToggleModeProcess(PowerManager& power, DisplayManager& displa
 power(power),
 display(display){}
 
-void ToggleModeProcess::handle(){
+void ToggleModeProcess::handle(unsigned long currentTime){
     if (deviceState == SLEEP){
-        display.message("SLEEP MODE", 1000);
-        display.turnOff();
+        if (sleepModeStartTime == currentTime){
+            display.message("SLEEP", 1000);
+            display.turnOff();
+        }
+        
         power.sleep();
     }
 
-    if (deviceState == ACTIVE){
+    if ((deviceState == ACTIVE) && (lastActivity == currentTime)){
         power.wakeUp();
         display.turnOn();
-        display.message("ACTIVE MODE", 1000);
+        display.message("ACTIVE", 1000);
     }
 };
